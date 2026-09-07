@@ -1,9 +1,11 @@
+# ===========================================================================
+# Lab 2 Homework
+#Just run this script and it should spit out results. Let me know if you have 
+#any quuestions on how to run it :))))
+# ===========================================================================
+
 library(Matrix)
 source(file.path("R", "assignment_helpers.r"))
-
-# ===========================================================================
-#Lab Tasks
-# ===========================================================================
 
 # ---------------------------------------------------------------------------
 # Task 3: nested loops, dense result
@@ -58,15 +60,11 @@ thresholded_distance_sparse <- function(x, y, threshold = 0.5) {
 
   d <- thresholded_distance_vectorized(x, y, threshold = threshold)
 
-  # Coerce to a column-compressed sparse matrix.
   d_sparse <- as(as(as(d, "dMatrix"), "generalMatrix"), "CsparseMatrix")
   Matrix::drop0(d_sparse)
 }
-
-
 threshold <- 0.5
 tol <- 1e-8
-
 
 # ===========================================================================
 # PART 1 -- CORRECTNESS CHECKS (small sample)
@@ -94,14 +92,14 @@ stopifnot(
     isTRUE(all.equal(as.matrix(t5_test), expected,
                      tolerance = tol, check.attributes = FALSE)),
 
-  # Task 3 and Task 4 must return a regular dense matrix.
+  # Task 3 and Task 4 have to return a regular dense matrix.
   "Task 3 did not return a dense matrix" = is.matrix(t3_test),
   "Task 4 did not return a dense matrix" = is.matrix(t4_test),
 
-  # Task 5 must return a sparse matrix object (dgCMatrix).
+  # Task 5 has to return a sparse matrix object in this case
   "Task 5 did not return a dgCMatrix" = inherits(t5_test, "dgCMatrix"),
 
-  # Distances of exactly 0.5 are preserved 
+  # make sure the distances of 0.5 are correct
   "Exact-threshold distance lost in Task 3" =
     all(abs(t3_test[, 2] - 0.5) < tol),
   "Exact-threshold distance lost in Task 4" =
@@ -110,7 +108,7 @@ stopifnot(
     all(abs(as.matrix(t5_test)[, 2] - 0.5) < tol)
 )
 
-# The supplied validators reject malformed inputs.
+# Checcks if the input is incorrect
 stopifnot(
   "Non-numeric x was not rejected" =
     inherits(try(thresholded_distance_vectorized("a", 1), silent = TRUE),
@@ -122,13 +120,10 @@ stopifnot(
 
 cat("Small-example checks passed.\n")
 
-
 # ===========================================================================
 # PART 2 -- CORRECTNESS CHECKS (full assignment data)
-
 # ===========================================================================
 source(file.path("R", "gendata.r"))
-
 
 lab2_vectors <- readRDS(file.path("data-raw", "lab2_vectors.rds"))
 x <- lab2_vectors$x
@@ -144,7 +139,7 @@ d_dense  <- thresholded_distance_vectorized(x, y, threshold)
 d_sparse <- thresholded_distance_sparse(x, y, threshold)
 
 stopifnot(
-  # Dimensions and total number of pairwise distances.
+  # Dimensions and total number of pairwise distances
   "Task 3 has the wrong dimensions" = all(dim(d_loop)   == c(3000, 5000)),
   "Task 4 has the wrong dimensions" = all(dim(d_dense)  == c(3000, 5000)),
   "Task 5 has the wrong dimensions" = all(dim(d_sparse) == c(3000, 5000)),
@@ -154,18 +149,18 @@ stopifnot(
   "Task 3 and Task 4 disagree" =
     isTRUE(all.equal(d_loop, d_dense, tolerance = tol)),
 
-  # Every dense entry, in BOTH dense results, is 0 or at least the threshold.
+  # Every dense entry, in BOTH dense results, is 0 or at least the threshold
   "A Task 3 entry is neither 0 nor >= threshold" =
     all(d_loop  == 0 | d_loop  >= threshold - tol),
   "A Task 4 entry is neither 0 nor >= threshold" =
     all(d_dense == 0 | d_dense >= threshold - tol),
 
-  # Nothing strictly between 0 and the threshold survived: the strict rule held.
+  # Nothing strictly between 0 and the threshold survived
   "A sub-threshold distance survived" =
     !any(d_dense > 0 & d_dense < threshold - tol),
 
-  # Task 5 is sparse, matches Task 4's nonzero count, and stores no explicit
-  # zeros (the number of stored values equals the number of nonzeros).
+  # Task 5 is sparse, matches Task 4's nonzero count, and stores no zeros 
+  
   "Task 5 did not return a dgCMatrix" = inherits(d_sparse, "dgCMatrix"),
   "Task 4 and Task 5 have different nonzero counts" =
     sum(d_dense != 0) == Matrix::nnzero(d_sparse),
@@ -181,17 +176,14 @@ cat("All correctness checks passed; beginning benchmark.\n\n")
 
 
 # ---------------------------------------------------------------------------
-# Stored-memory measurements, taken on the verified result objects
+# Measurements
 # ---------------------------------------------------------------------------
 size_loop   <- as.numeric(object.size(d_loop))
 size_dense  <- as.numeric(object.size(d_dense))
 size_sparse <- as.numeric(object.size(d_sparse))
-
 nnz_loop   <- sum(d_loop != 0)
 nnz_dense  <- sum(d_dense != 0)
 nnz_sparse <- Matrix::nnzero(d_sparse)
-
-# Release the verified results so the timing runs start from a clean slate.
 rm(d_loop, d_dense, d_sparse)
 invisible(gc())
 
