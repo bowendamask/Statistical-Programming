@@ -1,5 +1,3 @@
-# lab2.R
-
 library(Matrix)
 source(file.path("R", "assignment_helpers.r"))
 
@@ -131,8 +129,7 @@ cat("Small-example checks passed.\n")
 # ===========================================================================
 source(file.path("R", "gendata.r"))
 
-# gendata.r writes the vectors to data-raw/lab2_vectors.rds as a two-element
-# list. Read them back from that file (nothing in data-raw/ is edited by hand).
+
 lab2_vectors <- readRDS(file.path("data-raw", "lab2_vectors.rds"))
 x <- lab2_vectors$x
 y <- lab2_vectors$y
