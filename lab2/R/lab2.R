@@ -8,7 +8,7 @@ library(Matrix)
 source(file.path("R", "assignment_helpers.r"))
 
 # ---------------------------------------------------------------------------
-# Task 3: nested loops, dense result
+# Task 3
 # ---------------------------------------------------------------------------
 thresholded_distance_loop <- function(x, y, threshold = 0.5) {
   validate_pairwise_inputs(x, y)
@@ -35,9 +35,9 @@ thresholded_distance_loop <- function(x, y, threshold = 0.5) {
 }
 
 
-# ---------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 # Task 4 
-# ---------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 thresholded_distance_vectorized <- function(x, y, threshold = 0.5) {
   validate_pairwise_inputs(x, y)
   validate_threshold(threshold)
@@ -48,7 +48,6 @@ thresholded_distance_vectorized <- function(x, y, threshold = 0.5) {
 
   d
 }
-
 
 # ---------------------------------------------------------------------------
 # Task 5
@@ -66,9 +65,9 @@ thresholded_distance_sparse <- function(x, y, threshold = 0.5) {
 threshold <- 0.5
 tol <- 1e-8
 
-# ===========================================================================
+# ==========================================================================
 # PART 1 -- CORRECTNESS CHECKS (small sample)
-# ===========================================================================
+# ==========================================================================
 x_test <- c(0, 1)
 y_test <- c(0, 0.5, 2)
 
@@ -176,7 +175,7 @@ cat("All correctness checks passed; beginning benchmark.\n\n")
 
 
 # ---------------------------------------------------------------------------
-# Measurements
+# measurements
 # ---------------------------------------------------------------------------
 size_loop   <- as.numeric(object.size(d_loop))
 size_dense  <- as.numeric(object.size(d_dense))
@@ -188,17 +187,17 @@ rm(d_loop, d_dense, d_sparse)
 invisible(gc())
 
 
-# ===========================================================================
-# PART 3 -- BENCHMARK (once correctness checks have passed)
-# ===========================================================================
+# =========================================================================
+# PART 3 -- BENCHMARK (once all of the final correctness checks have passed)
+# =========================================================================
 time_loop       <- elapsed_seconds(thresholded_distance_loop,       x, y, threshold)
 time_vectorized <- elapsed_seconds(thresholded_distance_vectorized, x, y, threshold)
 time_sparse     <- elapsed_seconds(thresholded_distance_sparse,     x, y, threshold)
 
 
-# ---------------------------------------------------------------------------
-# Timing and memory comparison table
-# ---------------------------------------------------------------------------
+# -----------------------------------------------------------------------
+# write everything to a table
+# -------------------------------------------------------------------------
 results <- data.frame(
   method = c("Task 3: nested loops (dense)",
              "Task 4: vectorized (dense)",
@@ -213,9 +212,9 @@ print(results, row.names = FALSE)
 cat("\n")
 
 
-# ---------------------------------------------------------------------------
-# Required derived quantities
-# ---------------------------------------------------------------------------
+# -------------------------------------------------------------------------
+# final time gains
+# -------------------------------------------------------------------------
 time_gain <- time_loop / time_vectorized
 
 time_reduction_percent <- 100 * (1 - time_vectorized / time_loop)
