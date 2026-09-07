@@ -37,7 +37,7 @@ or from an R session:
 source(file.path("R", "lab2.R"))
 ```
 
-The script runs all the correctness checks, then benchmarks, prints the comparison table, and writes
+The script runs all the correctness checks, then benchmarks, prints the table, and writes
 `output/lab2_results.csv`.
 
 ## Functions
@@ -48,8 +48,8 @@ The script runs all the correctness checks, then benchmarks, prints the comparis
 | `thresholded_distance_vectorized(x, y, threshold = 0.5)` | 4 | dense `matrix` via `outer()`, no loops |
 | `thresholded_distance_sparse(x, y, threshold = 0.5)` | 5 | `dgCMatrix`, no explicit zeros |
 
-All three return a 3000 × 5000 result on the assignment data: row *i* corresponds to
-`x[i]`, column *j* to `y[j]`, 15,000,000 pairwise distances.
+All three return 3000 × 5000: row *i* corresponds to
+`x[i]`, column *j* to `y[j]`, so overall 15,000,000 pairwise distances.
 
 ## Results
 
