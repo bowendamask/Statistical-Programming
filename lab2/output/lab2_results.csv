@@ -1,0 +1,4 @@
+"method","elapsed_seconds","stored_result_bytes","nonzero_entries"
+"Task 3: nested loops (dense)",1.976,120000216,3703301
+"Task 4: vectorized (dense)",0.156,120000216,3703301
+"Task 5: vectorized (sparse)",0.316999999999999,44461120,3703301

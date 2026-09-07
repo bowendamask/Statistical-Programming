@@ -1,0 +1,31 @@
+# R
+.Rhistory
+.Rapp.history
+.RData
+.Rproj.user/
+*.Rproj.user
+.Ruserdata
+.Renviron
+
+# Session / build artifacts
+*.Rcheck/
+.httr-oauth
+*.utf8.md
+*.knit.md
+*_cache/
+*_files/
+
+# Large generated data — regenerate with R/gendata.r
+data-raw/*.rds
+data-raw/*.RData
+data-raw/*.csv
+!data-raw/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*~
