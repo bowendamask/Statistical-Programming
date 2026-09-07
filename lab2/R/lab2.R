@@ -4,7 +4,7 @@ library(Matrix)
 source(file.path("R", "assignment_helpers.r"))
 
 # ===========================================================================
-# IMPLEMENTATION -- Tasks 3, 4 and 5
+#Lab Tasks
 # ===========================================================================
 
 # ---------------------------------------------------------------------------
@@ -17,7 +17,6 @@ thresholded_distance_loop <- function(x, y, threshold = 0.5) {
   m <- length(x)
   n <- length(y)
 
-  # Preallocate the full result once; nothing is grown inside the loops.
   result <- matrix(0, nrow = m, ncol = n)
 
   for (i in seq_len(m)) {
@@ -37,17 +36,14 @@ thresholded_distance_loop <- function(x, y, threshold = 0.5) {
 
 
 # ---------------------------------------------------------------------------
-# Task 4: vectorized, dense result
+# Task 4 
 # ---------------------------------------------------------------------------
 thresholded_distance_vectorized <- function(x, y, threshold = 0.5) {
   validate_pairwise_inputs(x, y)
   validate_threshold(threshold)
 
-  # outer() builds all length(x) * length(y) differences in one vectorized
-  # pass; abs() is then applied to the whole matrix at once.
   d <- abs(outer(x, y, "-"))
 
-  # Strictly-less-than comparison, so exact ties with the threshold survive.
   d[d < threshold] <- 0
 
   d
@@ -55,21 +51,16 @@ thresholded_distance_vectorized <- function(x, y, threshold = 0.5) {
 
 
 # ---------------------------------------------------------------------------
-# Task 5: vectorized, sparse result
+# Task 5
 # ---------------------------------------------------------------------------
 thresholded_distance_sparse <- function(x, y, threshold = 0.5) {
   if (!requireNamespace("Matrix", quietly = TRUE)) {
     stop("The 'Matrix' package is required for Task 5.", call. = FALSE)
   }
 
-  # Reuse Task 4 exactly (which validates the inputs), then compress.
   d <- thresholded_distance_vectorized(x, y, threshold = threshold)
 
-  # Coerce explicitly to a general, column-compressed sparse matrix. This always
-  # yields a dgCMatrix; Matrix(d, sparse = TRUE) would return a symmetric class
-  # (dsCMatrix) whenever the input happens to be symmetric. Coercion from a
-  # dense matrix drops zeros, and drop0() guarantees that no explicit zero is
-  # carried in the sparse structure.
+  # Coerce to a column-compressed sparse matrix.
   d_sparse <- as(as(as(d, "dMatrix"), "generalMatrix"), "CsparseMatrix")
   Matrix::drop0(d_sparse)
 }
@@ -80,7 +71,7 @@ tol <- 1e-8
 
 
 # ===========================================================================
-# PART 1 -- CORRECTNESS CHECKS (small example)
+# PART 1 -- CORRECTNESS CHECKS (small sample)
 # ===========================================================================
 x_test <- c(0, 1)
 y_test <- c(0, 0.5, 2)
@@ -112,7 +103,7 @@ stopifnot(
   # Task 5 must return a sparse matrix object (dgCMatrix).
   "Task 5 did not return a dgCMatrix" = inherits(t5_test, "dgCMatrix"),
 
-  # Distances of exactly 0.5 are preserved (column 2 of the small example).
+  # Distances of exactly 0.5 are preserved 
   "Exact-threshold distance lost in Task 3" =
     all(abs(t3_test[, 2] - 0.5) < tol),
   "Exact-threshold distance lost in Task 4" =
@@ -136,8 +127,7 @@ cat("Small-example checks passed.\n")
 
 # ===========================================================================
 # PART 2 -- CORRECTNESS CHECKS (full assignment data)
-# These run on their own, untimed, so that every check is complete and
-# passing before any benchmarking begins.
+
 # ===========================================================================
 source(file.path("R", "gendata.r"))
 
@@ -210,9 +200,7 @@ invisible(gc())
 
 
 # ===========================================================================
-# PART 3 -- BENCHMARK (only after all correctness checks have passed)
-# Same vectors, threshold, machine and timing procedure for each method.
-# elapsed_seconds() is the supplied helper; it wraps system.time().
+# PART 3 -- BENCHMARK (once correctness checks have passed)
 # ===========================================================================
 time_loop       <- elapsed_seconds(thresholded_distance_loop,       x, y, threshold)
 time_vectorized <- elapsed_seconds(thresholded_distance_vectorized, x, y, threshold)
@@ -249,7 +237,7 @@ cat(sprintf("Task 3 -> Task 4 time gain:        %.2fx\n", time_gain))
 cat(sprintf("Task 3 -> Task 4 time reduction:   %.2f%%\n", time_reduction_percent))
 cat(sprintf("Task 4 -> Task 5 memory reduction: %.2f%%\n", memory_reduction_percent))
 
-# Save the table alongside the report.
+# Save the output
 if (dir.exists("output")) {
   write.csv(results, file.path("output", "lab2_results.csv"), row.names = FALSE)
 }
