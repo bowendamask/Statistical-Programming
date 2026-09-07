@@ -68,6 +68,6 @@ P(|X − Y| ≥ 0.5) = 0.25 for independent Uniform(0, 1) draws.
 
 The full write-up is in [`output/lab2_report.md`](output/lab2_report.md).
 
-##Disclosure
+## Disclosure
 
 Assignment used Claude Code for debugging, code efficiency, readability, and organization.
