@@ -23,13 +23,6 @@ Files and answers for Stat programming Lab 2 assignment
 └── README.md
 ```
 
-> `R/gendata.r` and `R/assignment_helpers.r` are supplied with the assignment.
-> `gendata.r` writes the vectors to
-> `data-raw/lab2_vectors.rds`; `R/lab2.R` sources it and then reads `x` and `y` back from
-> that file. `assignment_helpers.r` supplies
-> `validate_pairwise_inputs()` and `validate_threshold()`, which guard all three
-> implementations, and `elapsed_seconds()`, which is used for every timing measurement.
-
 ## Running
 
 With the repository root as the working directory:
@@ -44,7 +37,7 @@ or from an R session:
 source(file.path("R", "lab2.R"))
 ```
 
-The script runs every correctness check first and stops on any failure, then benchmarks, prints the comparison table, and writes
+The script runs all the correctness checks, then benchmarks, prints the comparison table, and writes
 `output/lab2_results.csv`.
 
 ## Functions
