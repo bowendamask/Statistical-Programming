@@ -1,6 +1,6 @@
 # Lab 2 
 
-Files and answers for Stat programming Lab 2 assignment
+Files and answers for Applied Stat Programming Lab 2 assignment :)
 
 ## Requirements
 
@@ -12,13 +12,13 @@ Files and answers for Stat programming Lab 2 assignment
 ```
 .
 ├── R/
-│   ├── gendata.r               # supplied with the assignment 
-│   ├── assignment_helpers.r    # supplied with the assignment 
+│   ├── gendata.r               # supplied by Xiangyu 
+│   ├── assignment_helpers.r    # supplied by Xiangyu  
 │   └── lab2.R                  # Tasks 3-5, correctness checks, benchmark
 ├── data-raw/        # raw data 
 ├── output/
 │   ├── lab2_report.md   # write-up
-│   └── lab2_results.csv # output comparison table
+│   └── lab2_results.csv # output :)
 ├── .gitignore
 └── README.md
 ```
