@@ -1,24 +1,7 @@
 # lab2.R
-# Lab 2 -- Thresholded pairwise distances: Tasks 3, 4 and 5, correctness checks,
-# and the timing / memory comparison.
-#
-# Run with the assignment folder as the working directory:
-#   Rscript R/lab2.R          (or)   source(file.path("R", "lab2.R"))
-#
-# Pairwise one-dimensional Euclidean distances abs(x[i] - y[j]) with a strict
-# threshold rule:
-#   distance <  threshold  -> stored as 0
-#   distance >= threshold  -> stored unchanged (a distance of exactly the
-#                             threshold is preserved)
-#
-# Row i corresponds to x[i]; column j corresponds to y[j].
 
 library(Matrix)
-
-# Supplied helpers: validate_pairwise_inputs(), validate_threshold(),
-# elapsed_seconds().
 source(file.path("R", "assignment_helpers.r"))
-
 
 # ===========================================================================
 # IMPLEMENTATION -- Tasks 3, 4 and 5
