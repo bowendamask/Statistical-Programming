@@ -3,7 +3,7 @@ output:
   pdf_document: default
   html_document: default
 ---
-%All you need to do is run this code and it will render the latex file. As always, let me know if something isnt working or rendering correctly. I used AI to OCR and format my answers. More than happy to provide my written work too.
+%All you need to do is knit this to pdf and it will render the tex file. As always, let me know if something isnt working or rendering correctly. I used AI to OCR and format my answers. More than happy to provide my written work too.
 
 ---
 title: "Applied Statistical Programming: Problem Set 1"
@@ -20,20 +20,17 @@ header-includes:
   - \renewcommand{\labelenumii}{\textbf{(\alph{enumii})}}
   - \allowdisplaybreaks
   - \AtBeginDocument{\setlength{\abovedisplayskip}{6pt}\setlength{\belowdisplayskip}{6pt}\setlength{\abovedisplayshortskip}{3pt}\setlength{\belowdisplayshortskip}{3pt}}
-  - \newcommand{\bq}{\begin{enumerate}}
-  - \newcommand{\eq}{\end{enumerate}}
-  - \newcommand{\bp}{\begin{enumerate}}
-  - \newcommand{\ep}{\end{enumerate}}
 ---
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = TRUE, fig.width = 6, fig.height = 4)
 ```
 
-\bq
+```{=latex}
+\begin{enumerate}
+```
 
 \item \leavevmode
-
 *Consider two $N \times N$ matrices, $A$ and $B$. Show that computing their product, $C = AB$, has computational complexity $O(N^3)$.*
 
 We can just count the number of multiplications and additions of $N$, so this is just
@@ -45,7 +42,7 @@ T(N) &= N^2 (2N - 1) \\[4pt]
 &= 2N^3 - N^2
 \end{align*}
 
-Lower bound is 
+Lower bound is
 
 \begin{align*}
 T(N) &= 2N^3 - N^2 \\[2pt]
@@ -66,13 +63,13 @@ T(N) &= O(N^3) \qquad \square
 \newpage
 
 \item \leavevmode
-
 *Let $X_1, \dots, X_n$ be i.i.d random variables with $E(X_i) = \mu$. Consider the sample mean $T_n = \bar{X} = \frac{1}{n}\sum_{i=1}^{n} X_i$. For each $i$, define the leave-one-out (loo) sample mean $T_{-i} = \frac{1}{n-1}\sum_{j \ne i} X_j$ and let $T_{(-)} = \frac{1}{n}\sum_{i=1}^{n} T_{-i}$.*
 
-\bp
+```{=latex}
+\begin{enumerate}
+```
 
 \item \leavevmode
-
 *Show that $T_{-i} = \dfrac{n\bar{X} - X_i}{n-1}$*
 
 \begin{align*}
@@ -84,7 +81,6 @@ T_{-i} &= \frac{1}{n-1} \left( n \bar{X} - X_i \right) \\[4pt]
 \end{align*}
 
 \item \leavevmode
-
 *Show that the average of the leave-one-out estimates equals the original sample mean i.e., $T_{(-)} = \bar{X}$*
 
 \begin{align*}
@@ -100,7 +96,6 @@ T_{(-)} &= \frac{n^2 \bar{X} - n \bar{X}}{n(n-1)} \\[6pt]
 \end{align*}
 
 \item \leavevmode
-
 *The estimate of bias is defined as $\widehat{\mathrm{Bias}}_{loo} = (n-1)\left( T_{(-)} - T_n \right)$. In this scenario, calculate this bias estimate term.*
 
 \begin{align*}
@@ -111,7 +106,6 @@ T_{(-)} &= \frac{n^2 \bar{X} - n \bar{X}}{n(n-1)} \\[6pt]
 \end{align*}
 
 \item \leavevmode
-
 *Calculate the the following bias-corrected estimator $T_{loo} = T_n - \widehat{\mathrm{Bias}}_{loo}$. Explain why this leave-one-out procedure does not change the sample mean.*
 
 \begin{align*}
@@ -125,21 +119,22 @@ T_{loo} &= T_n - \widehat{\mathrm{Bias}}_{loo} \\[4pt]
 
 So in this case, the leave-one-out does not change the sample mean because the sample mean is an average, so by (b) the leave-one-out values average back to it for all datasets. The bias estimate is also zero, and since the sample mean is already unbiased, there is nothing to correct.
 
-
-\ep
+```{=latex}
+\end{enumerate}
+```
 
 \item \leavevmode
-
 *Let $X_1, \dots, X_n$ be i.i.d. random variables drawn from the uniform distribution on $[0,1]$. Define the sample minimum as $T_n = \min\{X_1, \dots, X_n\}$.*
 
 \begin{align*}
 F(x) &= x, \qquad \Pr(X_i > s) = 1 - s, \qquad 0 \le s \le 1
 \end{align*}
 
-\bp
+```{=latex}
+\begin{enumerate}
+```
 
 \item \leavevmode
-
 *Show that $nT_n \overset{d}{\longrightarrow} \mathrm{Exp}(1)$, where $\mathrm{Exp}(1)$ denotes the exponential distribution with rate parameter 1.*
 
 \begin{align*}
@@ -166,7 +161,6 @@ n T_n \overset{d}{\longrightarrow} \mathrm{Exp}(1) \qquad \square
 \end{align*}
 
 \item \leavevmode
-
 *Draw a bootstrap sample $X_1^*, \dots, X_n^*$ with replacement from the original sample, and define $T_n^* = \min\{X_1^*, \dots, X_n^*\}$. Show that the probability that $T_n$ is not selected in the bootstrap sample converges to $e^{-1}$ as $n \to \infty$.*
 
 \begin{align*}
@@ -185,7 +179,6 @@ n \log\!\left( 1 - \tfrac{1}{n} \right) &= n \left( -\tfrac{1}{n} - \tfrac{1}{2n
 \end{align*}
 
 \item \leavevmode
-
 *Using the result from part 3.2, find the limiting value of $\Pr(T_n^* = T_n)$. What does this imply about the bootstrap distribution of $T_n^*$ relative to the sampling distribution of $T_n$? Is the nonparametric bootstrap valid in this setting?*
 
 \begin{align*}
@@ -207,32 +200,35 @@ n T_n &\overset{d}{\longrightarrow} \mathrm{Exp}(1) \qquad \text{by (a)} \\[4pt]
 
 So the nonparametric bootstrap is not valid in this setting. Since $n(T_n^* - T_n)$ is $\approx 0.632$ at $0$ while $nT_n$ has no mass at any single point, so the Kolmogorov distance does not vanish, and so it is not valid.
 
-\ep
+```{=latex}
+\end{enumerate}
+```
 
 \item \leavevmode
-
 *Muriel Bristol claimed that she could distinguish between cups in which tea was poured first and cups in which milk was poured first.*
 
 *Ronald Fisher presents the Muriel with eight cups. In four cups, the tea is poured first; in the other four, the milk is poured first. The order of the eight cups is randomized. The participant knows that there are four cups of each type and must classify exactly four as tea first and four as milk first. She classified all eight cups correctly.*
 
 *Throughout the question, use the number of correctly classified cups as the test statistic. Conduct a one-sided test, where larger values provide stronger evidence against the null hypothesis.*
 
-\bp
+```{=latex}
+\begin{enumerate}
+```
 
 \item \leavevmode
-
 *State the sharp null hypothesis using potential-outcomes notation.*
 
 The null can be written as
+
 \begin{align*}
-Y_i(1) &= Y_i(0) \qquad i = 1, \dots, 8 
+Y_i(1) &= Y_i(0) \qquad i = 1, \dots, 8
 \end{align*}
 
 \item \leavevmode
-
 *Under the null hypothesis, how many equally likely assignments are possible?*
 
 Since the order is random we can just write it as eight choose 4, where W is
+
 \begin{align*}
 \mathcal{W} = \Big\{ w \in \{0,1\}^8 : \textstyle\sum_{i} w_i = 4 \Big\} \\[4pt]
 |\mathcal{W}| &= \binom{8}{4} \\[4pt]
@@ -243,11 +239,9 @@ Since the order is random we can just write it as eight choose 4, where W is
 \end{align*}
 
 \item \leavevmode
-
 *Enumerate all possible assignments and calculate the number of correctly classified cups under each assignment.*
 
 Let $k = |G \cap T|$, where G is the first 4 cups that are classified and T is the first 4 cups that are actually tea. So we get
-
 
 \begin{align*}
 \text{tea-first which she is right about} &= k \\[4pt]
@@ -263,6 +257,7 @@ She doesnt call the milk ones, so the $4-k$ tea-first cups she misses are the on
 \end{align*}
 
 Therefore, all possible assignments are:
+
 \begin{center}
 \begin{tabular}{cccc}
 \hline
@@ -278,13 +273,11 @@ $k$ & $2k$ & \# assignments & pr(x) \\
 \end{center}
 
 \item \leavevmode
-
 *Calculate the exact one-sided permutation p-value $p = \Pr(S \ge S_{obs} \mid H_0)$ where $S$ is the number of correctly classified cups and $S_{obs} = 8$.*
 
 \begin{align*}
 p &= \Pr(S \ge S_{obs} \mid H_0), \qquad S_{obs} = 8 \\[4pt]
-&= \frac{\#\{ w \in \mathcal{W} : S(w) \ge 8 \}}{|\mathcal{W}|}
-\qquad W \text{ uniform on } \mathcal{W} \\[4pt]
+&= \frac{\#\{ w \in \mathcal{W} : S(w) \ge 8 \}}{|\mathcal{W}|}\qquad W \text{ uniform on } \mathcal{W} \\[4pt]
 &= \Pr(S = 8 \mid H_0) \\[4pt]
 &= \Pr(k = 4 \mid H_0) \\[4pt]
 &= \frac{\binom{4}{4}\binom{4}{0}}{\binom{8}{4}} \\[6pt]
@@ -293,7 +286,6 @@ p &= \Pr(S \ge S_{obs} \mid H_0), \qquad S_{obs} = 8 \\[4pt]
 \end{align*}
 
 \item \leavevmode
-
 *Based on the resulting p-value, would you reject the null hypothesis at the 5\% significance level? Briefly explain.*
 
 \begin{align*}
@@ -304,36 +296,36 @@ p &< \alpha \qquad \text{so we can reject the null} H_0
 
 Yes we can reject the null at the 5$\%$ level. So in this case, getting all eight right is therefore too unlikely to attribute to chance, and the data we have supports the conclusion that Muriel Bristol is able to tell which was poured first.
 
-\ep
+```{=latex}
+\end{enumerate}
+```
 
 \item \leavevmode
-
 *Now suppose the experiment in the previous question is repeated using 100 cups. Tea is poured first in 50 cups, and milk is poured first in the remaining 50. A new participant must classify exactly 50 cups as tea first and 50 as milk first. She correctly classifies 67 of the 100 cups.*
 
-\bp
+```{=latex}
+\begin{enumerate}
+```
 
 \item \leavevmode
-
 *Write R code that uses Monte Carlo simulation to approximate the randomization distribution under the sharp null hypothesis. Use at least $B = 100{,}000$ random assignments.*
 
 ```{r}
 set.seed(21523514)
 B <- 1e5
-truth <- rep(c(1, 0), each = 50)                    
-S <- replicate(B, sum(sample(truth) == truth))      
+truth <- rep(c(1, 0), each = 50)
+S <- replicate(B, sum(sample(truth) == truth))
 ```
 
 \item \leavevmode
-
 *For each simulated assignment, calculate the number of correctly classified cups.*
 
 ```{r}
-head(S, 12)                                         
+head(S, 12)
 summary(S)
 ```
 
 \item \leavevmode
-
 *Plot the simulated randomization distribution and indicate the observed statistic i.e., $S_{obs} = 67$ with a vertical line.*
 
 ```{r, fig.width = 6.2, fig.height = 3.4, fig.cap = "Simulated randomization distribution"}
@@ -347,7 +339,7 @@ legend("topright", "obs = 67", col = "red", lwd = 2, bty = "n")
 \item \leavevmode
 
 ```{r}
-p <- mean(S >= 67)                                  
+p <- mean(S >= 67)
 p
 ```
 
@@ -359,8 +351,12 @@ p
 \hat{p} &< \alpha \qquad \text{so we can reject the null} H_0
 \end{align*}
 
-So yes, we can reject the null at 5$\%$ significance. In the context of the experiment, this is evidence that she can tell the difference, as a score 67$\leq$ would occur approximately 3 of every 10,000 randomizations. 
+So yes, we can reject the null at 5$\%$ significance. In the context of the experiment, this is evidence that she can tell the difference, as a score 67$\leq$ would occur approximately 3 of every 10,000 randomizations.
 
-\ep
+```{=latex}
+\end{enumerate}
+```
 
-\eq
+```{=latex}
+\end{enumerate}
+```
