@@ -36,27 +36,27 @@ knitr::opts_chunk$set(echo = TRUE, fig.width = 6, fig.height = 4)
 We can just count the number of multiplications and additions of $N$, so this is just
 
 \begin{align*}
-\text{cost} &= N + (N - 1) = 2N - 1 \\[4pt]
-\text{number of entries} &= N^2 \\[4pt]
-T(N) &= N^2 (2N - 1) \\[4pt]
+\text{cost} &= N + (N - 1) = 2N - 1 \\
+\text{number of entries} &= N^2 \\
+T(N) &= N^2 (2N - 1) \\
 &= 2N^3 - N^2
 \end{align*}
 
 Lower bound is
 
 \begin{align*}
-T(N) &= 2N^3 - N^2 \\[2pt]
-&\ge N^3 \qquad \text{for } N \ge 1 \\[2pt]
-T(N) &= \Omega(N^3) \\[2pt]
+T(N) &= 2N^3 - N^2 \\
+&\ge N^3 \qquad \text{for } N \ge 1 \\
+T(N) &= \Omega(N^3) \\
 T(N) &= \Theta(N^3)
 \end{align*}
 
 Upper bound is
 
 \begin{align*}
-T(N) &= 2N^3 - N^2 \\[2pt]
-&\le 2N^3 \\[2pt]
-&= c\,N^3 \qquad c = 2, \; N_0 = 1 \\[2pt]
+T(N) &= 2N^3 - N^2 \\
+&\le 2N^3 \\
+&= c\,N^3 \qquad c = 2, \; N_0 = 1 \\
 T(N) &= O(N^3) \qquad \square
 \end{align*}
 
@@ -73,10 +73,10 @@ T(N) &= O(N^3) \qquad \square
 *Show that $T_{-i} = \dfrac{n\bar{X} - X_i}{n-1}$*
 
 \begin{align*}
-T_{-i} &= \frac{1}{n-1} \sum_{j \ne i} X_j \\[4pt]
-&= \frac{1}{n-1} \left( \sum_{j=1}^{n} X_j - X_i \right) \\[6pt]
-\sum_{j=1}^{n} X_j &= n \bar{X} \\[6pt]
-T_{-i} &= \frac{1}{n-1} \left( n \bar{X} - X_i \right) \\[4pt]
+T_{-i} &= \frac{1}{n-1} \sum_{j \ne i} X_j \\
+&= \frac{1}{n-1} \left( \sum_{j=1}^{n} X_j - X_i \right) \\
+\sum_{j=1}^{n} X_j &= n \bar{X} \\
+T_{-i} &= \frac{1}{n-1} \left( n \bar{X} - X_i \right) \\
 &= \frac{n \bar{X} - X_i}{n-1} \qquad \square
 \end{align*}
 
@@ -84,14 +84,14 @@ T_{-i} &= \frac{1}{n-1} \left( n \bar{X} - X_i \right) \\[4pt]
 *Show that the average of the leave-one-out estimates equals the original sample mean i.e., $T_{(-)} = \bar{X}$*
 
 \begin{align*}
-T_{(-)} &= \frac{1}{n} \sum_{i=1}^{n} T_{-i} \\[4pt]
-&= \frac{1}{n} \sum_{i=1}^{n} \frac{n \bar{X} - X_i}{n-1} \qquad \text{by (a)} \\[6pt]
-&= \frac{1}{n(n-1)} \sum_{i=1}^{n} \left( n \bar{X} - X_i \right) \\[6pt]
-&= \frac{1}{n(n-1)} \left( \sum_{i=1}^{n} n \bar{X} - \sum_{i=1}^{n} X_i \right) \\[6pt]
-\sum_{i=1}^{n} n \bar{X} &= n \cdot n \bar{X} = n^2 \bar{X} \\[4pt]
-\sum_{i=1}^{n} X_i &= n \bar{X} \\[6pt]
-T_{(-)} &= \frac{n^2 \bar{X} - n \bar{X}}{n(n-1)} \\[6pt]
-&= \frac{n \bar{X} (n - 1)}{n(n-1)} \\[6pt]
+T_{(-)} &= \frac{1}{n} \sum_{i=1}^{n} T_{-i} \\
+&= \frac{1}{n} \sum_{i=1}^{n} \frac{n \bar{X} - X_i}{n-1} \qquad \text{by (a)} \\
+&= \frac{1}{n(n-1)} \sum_{i=1}^{n} \left( n \bar{X} - X_i \right) \\
+&= \frac{1}{n(n-1)} \left( \sum_{i=1}^{n} n \bar{X} - \sum_{i=1}^{n} X_i \right) \\
+\sum_{i=1}^{n} n \bar{X} &= n \cdot n \bar{X} = n^2 \bar{X} \\
+\sum_{i=1}^{n} X_i &= n \bar{X} \\
+T_{(-)} &= \frac{n^2 \bar{X} - n \bar{X}}{n(n-1)} \\
+&= \frac{n \bar{X} (n - 1)}{n(n-1)} \\
 &= \bar{X} = T_n \qquad \square
 \end{align*}
 
@@ -99,9 +99,9 @@ T_{(-)} &= \frac{n^2 \bar{X} - n \bar{X}}{n(n-1)} \\[6pt]
 *The estimate of bias is defined as $\widehat{\mathrm{Bias}}_{loo} = (n-1)\left( T_{(-)} - T_n \right)$. In this scenario, calculate this bias estimate term.*
 
 \begin{align*}
-\widehat{\mathrm{Bias}}_{loo} &= (n-1) \left( T_{(-)} - T_n \right) \\[4pt]
-&= (n-1) \left( \bar{X} - \bar{X} \right) \qquad \text{by (b)} \\[4pt]
-&= (n-1) \cdot 0 \\[4pt]
+\widehat{\mathrm{Bias}}_{loo} &= (n-1) \left( T_{(-)} - T_n \right) \\
+&= (n-1) \left( \bar{X} - \bar{X} \right) \qquad \text{by (b)} \\
+&= (n-1) \cdot 0 \\
 &= 0
 \end{align*}
 
@@ -109,11 +109,11 @@ T_{(-)} &= \frac{n^2 \bar{X} - n \bar{X}}{n(n-1)} \\[6pt]
 *Calculate the the following bias-corrected estimator $T_{loo} = T_n - \widehat{\mathrm{Bias}}_{loo}$. Explain why this leave-one-out procedure does not change the sample mean.*
 
 \begin{align*}
-T_{loo} &= T_n - \widehat{\mathrm{Bias}}_{loo} \\[4pt]
-&= T_n - (n-1)\left( T_{(-)} - T_n \right) \\[4pt]
-&= n T_n - (n-1) T_{(-)} \\[4pt]
-&= n \bar{X} - (n-1) \bar{X} \qquad \text{by (b)} \\[4pt]
-&= \bar{X} \\[4pt]
+T_{loo} &= T_n - \widehat{\mathrm{Bias}}_{loo} \\
+&= T_n - (n-1)\left( T_{(-)} - T_n \right) \\
+&= n T_n - (n-1) T_{(-)} \\
+&= n \bar{X} - (n-1) \bar{X} \qquad \text{by (b)} \\
+&= \bar{X} \\
 &= T_n
 \end{align*}
 
@@ -138,19 +138,19 @@ F(x) &= x, \qquad \Pr(X_i > s) = 1 - s, \qquad 0 \le s \le 1
 *Show that $nT_n \overset{d}{\longrightarrow} \mathrm{Exp}(1)$, where $\mathrm{Exp}(1)$ denotes the exponential distribution with rate parameter 1.*
 
 \begin{align*}
-\text{Fix } t &\ge 0, \text{ take } n > t \text{ so that } 0 \le \tfrac{t}{n} \le 1 \\[6pt]
-\Pr(nT_n > t) &= \Pr\!\left( T_n > \tfrac{t}{n} \right) \\[4pt]
-&= \Pr\!\left( \min_i X_i > \tfrac{t}{n} \right) \\[4pt]
-&= \Pr\!\left( X_1 > \tfrac{t}{n}, \; \dots, \; X_n > \tfrac{t}{n} \right) \\[4pt]
-&= \prod_{i=1}^{n} \Pr\!\left( X_i > \tfrac{t}{n} \right) \qquad \text{by independence} \\[4pt]
+\text{Fix } t &\ge 0, \text{ take } n > t \text{ so that } 0 \le \tfrac{t}{n} \le 1 \\
+\Pr(nT_n > t) &= \Pr\!\left( T_n > \tfrac{t}{n} \right) \\
+&= \Pr\!\left( \min_i X_i > \tfrac{t}{n} \right) \\
+&= \Pr\!\left( X_1 > \tfrac{t}{n}, \; \dots, \; X_n > \tfrac{t}{n} \right) \\
+&= \prod_{i=1}^{n} \Pr\!\left( X_i > \tfrac{t}{n} \right) \qquad \text{by independence} \\
 &= \left( 1 - \tfrac{t}{n} \right)^{n} \qquad \text{by i.d.} \\[10pt]
-\log \left( 1 - \tfrac{t}{n} \right)^{n} &= n \log \left( 1 - \tfrac{t}{n} \right) \\[4pt]
-&= n \left( -\tfrac{t}{n} - \tfrac{t^2}{2n^2} - \tfrac{t^3}{3n^3} - \cdots \right) \\[4pt]
-&= -t - \tfrac{t^2}{2n} - \tfrac{t^3}{3n^2} - \cdots \\[4pt]
-&\longrightarrow -t \qquad n \to \infty \\[6pt]
+\log \left( 1 - \tfrac{t}{n} \right)^{n} &= n \log \left( 1 - \tfrac{t}{n} \right) \\
+&= n \left( -\tfrac{t}{n} - \tfrac{t^2}{2n^2} - \tfrac{t^3}{3n^3} - \cdots \right) \\
+&= -t - \tfrac{t^2}{2n} - \tfrac{t^3}{3n^2} - \cdots \\
+&\longrightarrow -t \qquad n \to \infty \\
 \Pr(nT_n > t) &\longrightarrow e^{-t} \\[10pt]
-F_{nT_n}(t) &= 1 - \left( 1 - \tfrac{t}{n} \right)^{n} \\[4pt]
-&\longrightarrow 1 - e^{-t}, \qquad t \ge 0 \\[4pt]
+F_{nT_n}(t) &= 1 - \left( 1 - \tfrac{t}{n} \right)^{n} \\
+&\longrightarrow 1 - e^{-t}, \qquad t \ge 0 \\
 F_{nT_n}(t) &= 0 \longrightarrow 0, \qquad t < 0
 \end{align*}
 
@@ -164,17 +164,17 @@ n T_n \overset{d}{\longrightarrow} \mathrm{Exp}(1) \qquad \square
 *Draw a bootstrap sample $X_1^*, \dots, X_n^*$ with replacement from the original sample, and define $T_n^* = \min\{X_1^*, \dots, X_n^*\}$. Show that the probability that $T_n$ is not selected in the bootstrap sample converges to $e^{-1}$ as $n \to \infty$.*
 
 \begin{align*}
-\text{We can define } M &= \arg\min_i X_i, \qquad T_n = X_M \\[4pt]
-\text{Bootstrap } X_1^*, \dots, X_n^* &\overset{iid}{\sim} \mathrm{Unif}\{X_1, \dots, X_n\} \\[4pt]
-\Pr(X_i^* = X_j) &= \tfrac{1}{n}, \qquad j = 1, \dots, n \\[4pt]
-\Pr(X_i^* \ne X_M) &= 1 - \tfrac{1}{n} \\[4pt]
+\text{We can define } M &= \arg\min_i X_i, \qquad T_n = X_M \\
+\text{Bootstrap } X_1^*, \dots, X_n^* &\overset{iid}{\sim} \mathrm{Unif}\{X_1, \dots, X_n\} \\
+\Pr(X_i^* = X_j) &= \tfrac{1}{n}, \qquad j = 1, \dots, n \\
+\Pr(X_i^* \ne X_M) &= 1 - \tfrac{1}{n} \\
 \Pr\!\left( T_n \notin \{X_1^*, \dots, X_n^*\} \right)
-&= \Pr\!\left( X_1^* \ne X_M, \dots, X_n^* \ne X_M \right) \\[4pt]
-&= \prod_{i=1}^{n} \Pr(X_i^* \ne X_M) \\[4pt]
+&= \Pr\!\left( X_1^* \ne X_M, \dots, X_n^* \ne X_M \right) \\
+&= \prod_{i=1}^{n} \Pr(X_i^* \ne X_M) \\
 &= \left( 1 - \tfrac{1}{n} \right)^{n} \\[10pt]
-n \log\!\left( 1 - \tfrac{1}{n} \right) &= n \left( -\tfrac{1}{n} - \tfrac{1}{2n^2} - \tfrac{1}{3n^3} - \cdots \right) \\[4pt]
-&= -1 - \tfrac{1}{2n} - \tfrac{1}{3n^2} - \cdots \\[4pt]
-&\longrightarrow -1 \\[6pt]
+n \log\!\left( 1 - \tfrac{1}{n} \right) &= n \left( -\tfrac{1}{n} - \tfrac{1}{2n^2} - \tfrac{1}{3n^3} - \cdots \right) \\
+&= -1 - \tfrac{1}{2n} - \tfrac{1}{3n^2} - \cdots \\
+&\longrightarrow -1 \\
 \left( 1 - \tfrac{1}{n} \right)^{n} &\longrightarrow e^{-1} \approx 0.3679 \qquad \square
 \end{align*}
 
@@ -182,19 +182,19 @@ n \log\!\left( 1 - \tfrac{1}{n} \right) &= n \left( -\tfrac{1}{n} - \tfrac{1}{2n
 *Using the result from part 3.2, find the limiting value of $\Pr(T_n^* = T_n)$. What does this imply about the bootstrap distribution of $T_n^*$ relative to the sampling distribution of $T_n$? Is the nonparametric bootstrap valid in this setting?*
 
 \begin{align*}
-X_i \text{ continuous} &\text{, so } M \text{ is unique a.s. and } T_n = X_M \\[4pt]
-X_i^* \in \{X_1, \dots, X_n\} &\ge T_n \quad \text{for all } i, \qquad \text{so } T_n^* \ge T_n \\[4pt]
-\{ T_n^* = T_n \} &= \{ X_M \text{ drawn at least once} \} \\[6pt]
-\Pr(T_n^* = T_n) &= 1 - \Pr\!\left( T_n \notin \{X_1^*, \dots, X_n^*\} \right) \\[4pt]
-&= 1 - \left( 1 - \tfrac{1}{n} \right)^{n} \qquad \text{by (b)} \\[4pt]
+X_i \text{ continuous} &\text{, so } M \text{ is unique a.s. and } T_n = X_M \\
+X_i^* \in \{X_1, \dots, X_n\} &\ge T_n \quad \text{for all } i, \qquad \text{so } T_n^* \ge T_n \\
+\{ T_n^* = T_n \} &= \{ X_M \text{ drawn at least once} \} \\
+\Pr(T_n^* = T_n) &= 1 - \Pr\!\left( T_n \notin \{X_1^*, \dots, X_n^*\} \right) \\
+&= 1 - \left( 1 - \tfrac{1}{n} \right)^{n} \qquad \text{by (b)} \\
 &\longrightarrow 1 - e^{-1} \approx 0.6321
 \end{align*}
 
 For the bootstrap we then get
 
 \begin{align*}
-n(T_n^* - T_n) &= 0 \quad \text{with pr} 1 - \left( 1 - \tfrac{1}{n} \right)^{n} \longrightarrow 1 - e^{-1} \\[4pt]
-n T_n &\overset{d}{\longrightarrow} \mathrm{Exp}(1) \qquad \text{by (a)} \\[4pt]
+n(T_n^* - T_n) &= 0 \quad \text{with pr} 1 - \left( 1 - \tfrac{1}{n} \right)^{n} \longrightarrow 1 - e^{-1} \\
+n T_n &\overset{d}{\longrightarrow} \mathrm{Exp}(1) \qquad \text{by (a)} \\
 \Pr\!\left( \mathrm{Exp}(1) = 0 \right) &= 0
 \end{align*}
 
@@ -230,11 +230,11 @@ Y_i(1) &= Y_i(0) \qquad i = 1, \dots, 8
 Since the order is random we can just write it as eight choose 4, where W is
 
 \begin{align*}
-\mathcal{W} = \Big\{ w \in \{0,1\}^8 : \textstyle\sum_{i} w_i = 4 \Big\} \\[4pt]
-|\mathcal{W}| &= \binom{8}{4} \\[4pt]
-&= \frac{8!}{4! \, 4!} \\[4pt]
-&= \frac{40320}{24 \cdot 24} \\[4pt]
-&= 70 \\[4pt]
+\mathcal{W} = \Big\{ w \in \{0,1\}^8 : \textstyle\sum_{i} w_i = 4 \Big\} \\
+|\mathcal{W}| &= \binom{8}{4} \\
+&= \frac{8!}{4! \, 4!} \\
+&= \frac{40320}{24 \cdot 24} \\
+&= 70 \\
 \Pr(W = w) &= \tfrac{1}{70}
 \end{align*}
 
@@ -244,9 +244,9 @@ Since the order is random we can just write it as eight choose 4, where W is
 Let $k = |G \cap T|$, where G is the first 4 cups that are classified and T is the first 4 cups that are actually tea. So we get
 
 \begin{align*}
-\text{tea-first which she is right about} &= k \\[4pt]
-\text{tea-first which she is wrong about} &= 4 - k \\[4pt]
-\text{milk-first which she is right about} &= 4 - (4 - k) = k \\[6pt]
+\text{tea-first which she is right about} &= k \\
+\text{tea-first which she is wrong about} &= 4 - k \\
+\text{milk-first which she is right about} &= 4 - (4 - k) = k \\
 2k \in \{0, 2, 4, 6, 8\}
 \end{align*}
 
@@ -276,12 +276,12 @@ $k$ & $2k$ & \# assignments & pr(x) \\
 *Calculate the exact one-sided permutation p-value $p = \Pr(S \ge S_{obs} \mid H_0)$ where $S$ is the number of correctly classified cups and $S_{obs} = 8$.*
 
 \begin{align*}
-p &= \Pr(S \ge S_{obs} \mid H_0), \qquad S_{obs} = 8 \\[4pt]
-&= \frac{\#\{ w \in \mathcal{W} : S(w) \ge 8 \}}{|\mathcal{W}|}\qquad W \text{ uniform on } \mathcal{W} \\[4pt]
-&= \Pr(S = 8 \mid H_0) \\[4pt]
-&= \Pr(k = 4 \mid H_0) \\[4pt]
-&= \frac{\binom{4}{4}\binom{4}{0}}{\binom{8}{4}} \\[6pt]
-&= \frac{1 \cdot 1}{70} \\[6pt]
+p &= \Pr(S \ge S_{obs} \mid H_0), \qquad S_{obs} = 8 \\
+&= \frac{\#\{ w \in \mathcal{W} : S(w) \ge 8 \}}{|\mathcal{W}|}\qquad W \text{ uniform on } \mathcal{W} \\
+&= \Pr(S = 8 \mid H_0) \\
+&= \Pr(k = 4 \mid H_0) \\
+&= \frac{\binom{4}{4}\binom{4}{0}}{\binom{8}{4}} \\
+&= \frac{1 \cdot 1}{70} \\
 &= \frac{1}{70} = 0.0142857
 \end{align*}
 
@@ -289,8 +289,8 @@ p &= \Pr(S \ge S_{obs} \mid H_0), \qquad S_{obs} = 8 \\[4pt]
 *Based on the resulting p-value, would you reject the null hypothesis at the 5\% significance level? Briefly explain.*
 
 \begin{align*}
-\alpha &= 0.05 \\[2pt]
-p &= 0.0143 \\[2pt]
+\alpha &= 0.05 \\
+p &= 0.0143 \\
 p &< \alpha \qquad \text{so we can reject the null} H_0
 \end{align*}
 
@@ -346,8 +346,8 @@ p
 \item \leavevmode
 
 \begin{align*}
-\alpha &= 0.05\\[2pt]
-\hat{p} &= 0.0003 \\[2pt]
+\alpha &= 0.05\\
+\hat{p} &= 0.0003 \\
 \hat{p} &< \alpha \qquad \text{so we can reject the null} H_0
 \end{align*}
 
