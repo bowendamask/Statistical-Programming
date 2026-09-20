@@ -1,0 +1,366 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+%As always, let me know if something isnt working or rendering correctly. I used AI to OCR and format my answers. More than happy to provide my written work too.
+
+---
+title: "Applied Statistical Programming: Problem Set 1"
+author: "Bowen Damask"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    keep_tex: true
+    highlight: tango
+geometry: margin=1in
+fontsize: 11pt
+header-includes:
+  - \renewcommand{\labelenumi}{\textbf{Question \arabic{enumi}.}}
+  - \renewcommand{\labelenumii}{\textbf{(\alph{enumii})}}
+  - \allowdisplaybreaks
+  - \AtBeginDocument{\setlength{\abovedisplayskip}{6pt}\setlength{\belowdisplayskip}{6pt}\setlength{\abovedisplayshortskip}{3pt}\setlength{\belowdisplayshortskip}{3pt}}
+  - \newcommand{\bq}{\begin{enumerate}}
+  - \newcommand{\eq}{\end{enumerate}}
+  - \newcommand{\bp}{\begin{enumerate}}
+  - \newcommand{\ep}{\end{enumerate}}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.width = 6, fig.height = 4)
+```
+
+\bq
+
+\item \leavevmode
+
+*Consider two $N \times N$ matrices, $A$ and $B$. Show that computing their product, $C = AB$, has computational complexity $O(N^3)$.*
+
+We can just count the number of multiplications and additions of $N$, so this is just
+
+\begin{align*}
+\text{cost} &= N + (N - 1) = 2N - 1 \\[4pt]
+\text{number of entries} &= N^2 \\[4pt]
+T(N) &= N^2 (2N - 1) \\[4pt]
+&= 2N^3 - N^2
+\end{align*}
+
+Lower bound is 
+
+\begin{align*}
+T(N) &= 2N^3 - N^2 \\[2pt]
+&\ge N^3 \qquad \text{for } N \ge 1 \\[2pt]
+T(N) &= \Omega(N^3) \\[2pt]
+T(N) &= \Theta(N^3)
+\end{align*}
+
+Upper bound is
+
+\begin{align*}
+T(N) &= 2N^3 - N^2 \\[2pt]
+&\le 2N^3 \\[2pt]
+&= c\,N^3 \qquad c = 2, \; N_0 = 1 \\[2pt]
+T(N) &= O(N^3) \qquad \square
+\end{align*}
+
+\newpage
+
+\item \leavevmode
+
+*Let $X_1, \dots, X_n$ be i.i.d random variables with $E(X_i) = \mu$. Consider the sample mean $T_n = \bar{X} = \frac{1}{n}\sum_{i=1}^{n} X_i$. For each $i$, define the leave-one-out (loo) sample mean $T_{-i} = \frac{1}{n-1}\sum_{j \ne i} X_j$ and let $T_{(-)} = \frac{1}{n}\sum_{i=1}^{n} T_{-i}$.*
+
+\bp
+
+\item \leavevmode
+
+*Show that $T_{-i} = \dfrac{n\bar{X} - X_i}{n-1}$*
+
+\begin{align*}
+T_{-i} &= \frac{1}{n-1} \sum_{j \ne i} X_j \\[4pt]
+&= \frac{1}{n-1} \left( \sum_{j=1}^{n} X_j - X_i \right) \\[6pt]
+\sum_{j=1}^{n} X_j &= n \bar{X} \\[6pt]
+T_{-i} &= \frac{1}{n-1} \left( n \bar{X} - X_i \right) \\[4pt]
+&= \frac{n \bar{X} - X_i}{n-1} \qquad \square
+\end{align*}
+
+\item \leavevmode
+
+*Show that the average of the leave-one-out estimates equals the original sample mean i.e., $T_{(-)} = \bar{X}$*
+
+\begin{align*}
+T_{(-)} &= \frac{1}{n} \sum_{i=1}^{n} T_{-i} \\[4pt]
+&= \frac{1}{n} \sum_{i=1}^{n} \frac{n \bar{X} - X_i}{n-1} \qquad \text{by (a)} \\[6pt]
+&= \frac{1}{n(n-1)} \sum_{i=1}^{n} \left( n \bar{X} - X_i \right) \\[6pt]
+&= \frac{1}{n(n-1)} \left( \sum_{i=1}^{n} n \bar{X} - \sum_{i=1}^{n} X_i \right) \\[6pt]
+\sum_{i=1}^{n} n \bar{X} &= n \cdot n \bar{X} = n^2 \bar{X} \\[4pt]
+\sum_{i=1}^{n} X_i &= n \bar{X} \\[6pt]
+T_{(-)} &= \frac{n^2 \bar{X} - n \bar{X}}{n(n-1)} \\[6pt]
+&= \frac{n \bar{X} (n - 1)}{n(n-1)} \\[6pt]
+&= \bar{X} = T_n \qquad \square
+\end{align*}
+
+\item \leavevmode
+
+*The estimate of bias is defined as $\widehat{\mathrm{Bias}}_{loo} = (n-1)\left( T_{(-)} - T_n \right)$. In this scenario, calculate this bias estimate term.*
+
+\begin{align*}
+\widehat{\mathrm{Bias}}_{loo} &= (n-1) \left( T_{(-)} - T_n \right) \\[4pt]
+&= (n-1) \left( \bar{X} - \bar{X} \right) \qquad \text{by (b)} \\[4pt]
+&= (n-1) \cdot 0 \\[4pt]
+&= 0
+\end{align*}
+
+\item \leavevmode
+
+*Calculate the the following bias-corrected estimator $T_{loo} = T_n - \widehat{\mathrm{Bias}}_{loo}$. Explain why this leave-one-out procedure does not change the sample mean.*
+
+\begin{align*}
+T_{loo} &= T_n - \widehat{\mathrm{Bias}}_{loo} \\[4pt]
+&= T_n - (n-1)\left( T_{(-)} - T_n \right) \\[4pt]
+&= n T_n - (n-1) T_{(-)} \\[4pt]
+&= n \bar{X} - (n-1) \bar{X} \qquad \text{by (b)} \\[4pt]
+&= \bar{X} \\[4pt]
+&= T_n
+\end{align*}
+
+So in this case, the leave-one-out does not change the sample mean because the sample mean is an average, so by (b) the leave-one-out values average back to it for all datasets. The bias estimate is also zero, and since the sample mean is already unbiased, there is nothing to correct.
+
+
+\ep
+
+\item \leavevmode
+
+*Let $X_1, \dots, X_n$ be i.i.d. random variables drawn from the uniform distribution on $[0,1]$. Define the sample minimum as $T_n = \min\{X_1, \dots, X_n\}$.*
+
+\begin{align*}
+F(x) &= x, \qquad \Pr(X_i > s) = 1 - s, \qquad 0 \le s \le 1
+\end{align*}
+
+\bp
+
+\item \leavevmode
+
+*Show that $nT_n \overset{d}{\longrightarrow} \mathrm{Exp}(1)$, where $\mathrm{Exp}(1)$ denotes the exponential distribution with rate parameter 1.*
+
+\begin{align*}
+\text{Fix } t &\ge 0, \text{ take } n > t \text{ so that } 0 \le \tfrac{t}{n} \le 1 \\[6pt]
+\Pr(nT_n > t) &= \Pr\!\left( T_n > \tfrac{t}{n} \right) \\[4pt]
+&= \Pr\!\left( \min_i X_i > \tfrac{t}{n} \right) \\[4pt]
+&= \Pr\!\left( X_1 > \tfrac{t}{n}, \; \dots, \; X_n > \tfrac{t}{n} \right) \\[4pt]
+&= \prod_{i=1}^{n} \Pr\!\left( X_i > \tfrac{t}{n} \right) \qquad \text{by independence} \\[4pt]
+&= \left( 1 - \tfrac{t}{n} \right)^{n} \qquad \text{by i.d.} \\[10pt]
+\log \left( 1 - \tfrac{t}{n} \right)^{n} &= n \log \left( 1 - \tfrac{t}{n} \right) \\[4pt]
+&= n \left( -\tfrac{t}{n} - \tfrac{t^2}{2n^2} - \tfrac{t^3}{3n^3} - \cdots \right) \\[4pt]
+&= -t - \tfrac{t^2}{2n} - \tfrac{t^3}{3n^2} - \cdots \\[4pt]
+&\longrightarrow -t \qquad n \to \infty \\[6pt]
+\Pr(nT_n > t) &\longrightarrow e^{-t} \\[10pt]
+F_{nT_n}(t) &= 1 - \left( 1 - \tfrac{t}{n} \right)^{n} \\[4pt]
+&\longrightarrow 1 - e^{-t}, \qquad t \ge 0 \\[4pt]
+F_{nT_n}(t) &= 0 \longrightarrow 0, \qquad t < 0
+\end{align*}
+
+The limit is the cdf of $\mathrm{Exp}(1)$, which here is continuous on $\mathbb{R}$, so we get
+
+\begin{align*}
+n T_n \overset{d}{\longrightarrow} \mathrm{Exp}(1) \qquad \square
+\end{align*}
+
+\item \leavevmode
+
+*Draw a bootstrap sample $X_1^*, \dots, X_n^*$ with replacement from the original sample, and define $T_n^* = \min\{X_1^*, \dots, X_n^*\}$. Show that the probability that $T_n$ is not selected in the bootstrap sample converges to $e^{-1}$ as $n \to \infty$.*
+
+\begin{align*}
+\text{We can define } M &= \arg\min_i X_i, \qquad T_n = X_M \\[4pt]
+\text{Bootstrap } X_1^*, \dots, X_n^* &\overset{iid}{\sim} \mathrm{Unif}\{X_1, \dots, X_n\} \\[4pt]
+\Pr(X_i^* = X_j) &= \tfrac{1}{n}, \qquad j = 1, \dots, n \\[4pt]
+\Pr(X_i^* \ne X_M) &= 1 - \tfrac{1}{n} \\[4pt]
+\Pr\!\left( T_n \notin \{X_1^*, \dots, X_n^*\} \right)
+&= \Pr\!\left( X_1^* \ne X_M, \dots, X_n^* \ne X_M \right) \\[4pt]
+&= \prod_{i=1}^{n} \Pr(X_i^* \ne X_M) \\[4pt]
+&= \left( 1 - \tfrac{1}{n} \right)^{n} \\[10pt]
+n \log\!\left( 1 - \tfrac{1}{n} \right) &= n \left( -\tfrac{1}{n} - \tfrac{1}{2n^2} - \tfrac{1}{3n^3} - \cdots \right) \\[4pt]
+&= -1 - \tfrac{1}{2n} - \tfrac{1}{3n^2} - \cdots \\[4pt]
+&\longrightarrow -1 \\[6pt]
+\left( 1 - \tfrac{1}{n} \right)^{n} &\longrightarrow e^{-1} \approx 0.3679 \qquad \square
+\end{align*}
+
+\item \leavevmode
+
+*Using the result from part 3.2, find the limiting value of $\Pr(T_n^* = T_n)$. What does this imply about the bootstrap distribution of $T_n^*$ relative to the sampling distribution of $T_n$? Is the nonparametric bootstrap valid in this setting?*
+
+\begin{align*}
+X_i \text{ continuous} &\text{, so } M \text{ is unique a.s. and } T_n = X_M \\[4pt]
+X_i^* \in \{X_1, \dots, X_n\} &\ge T_n \quad \text{for all } i, \qquad \text{so } T_n^* \ge T_n \\[4pt]
+\{ T_n^* = T_n \} &= \{ X_M \text{ drawn at least once} \} \\[6pt]
+\Pr(T_n^* = T_n) &= 1 - \Pr\!\left( T_n \notin \{X_1^*, \dots, X_n^*\} \right) \\[4pt]
+&= 1 - \left( 1 - \tfrac{1}{n} \right)^{n} \qquad \text{by (b)} \\[4pt]
+&\longrightarrow 1 - e^{-1} \approx 0.6321
+\end{align*}
+
+For the bootstrap we then get
+
+\begin{align*}
+n(T_n^* - T_n) &= 0 \quad \text{with pr} 1 - \left( 1 - \tfrac{1}{n} \right)^{n} \longrightarrow 1 - e^{-1} \\[4pt]
+n T_n &\overset{d}{\longrightarrow} \mathrm{Exp}(1) \qquad \text{by (a)} \\[4pt]
+\Pr\!\left( \mathrm{Exp}(1) = 0 \right) &= 0
+\end{align*}
+
+So the nonparametric bootstrap is not valid in this setting. Since $n(T_n^* - T_n)$ is $\approx 0.632$ at $0$ while $nT_n$ has no mass at any single point, so the Kolmogorov distance does not vanish, and so it is not valid.
+
+\ep
+
+\item \leavevmode
+
+*Muriel Bristol claimed that she could distinguish between cups in which tea was poured first and cups in which milk was poured first.*
+
+*Ronald Fisher presents the Muriel with eight cups. In four cups, the tea is poured first; in the other four, the milk is poured first. The order of the eight cups is randomized. The participant knows that there are four cups of each type and must classify exactly four as tea first and four as milk first. She classified all eight cups correctly.*
+
+*Throughout the question, use the number of correctly classified cups as the test statistic. Conduct a one-sided test, where larger values provide stronger evidence against the null hypothesis.*
+
+\bp
+
+\item \leavevmode
+
+*State the sharp null hypothesis using potential-outcomes notation.*
+
+The null can be written as
+\begin{align*}
+Y_i(1) &= Y_i(0) \qquad i = 1, \dots, 8 
+\end{align*}
+
+\item \leavevmode
+
+*Under the null hypothesis, how many equally likely assignments are possible?*
+
+Since the order is random we can just write it as eight choose 4, where W is
+\begin{align*}
+\mathcal{W} = \Big\{ w \in \{0,1\}^8 : \textstyle\sum_{i} w_i = 4 \Big\} \\[4pt]
+|\mathcal{W}| &= \binom{8}{4} \\[4pt]
+&= \frac{8!}{4! \, 4!} \\[4pt]
+&= \frac{40320}{24 \cdot 24} \\[4pt]
+&= 70 \\[4pt]
+\Pr(W = w) &= \tfrac{1}{70}
+\end{align*}
+
+\item \leavevmode
+
+*Enumerate all possible assignments and calculate the number of correctly classified cups under each assignment.*
+
+Let $k = |G \cap T|$, where G is the first 4 cups that are classified and T is the first 4 cups that are actually tea. So we get
+
+
+\begin{align*}
+\text{tea-first which she is right about} &= k \\[4pt]
+\text{tea-first which she is wrong about} &= 4 - k \\[4pt]
+\text{milk-first which she is right about} &= 4 - (4 - k) = k \\[6pt]
+2k \in \{0, 2, 4, 6, 8\}
+\end{align*}
+
+She doesnt call the milk ones, so the $4-k$ tea-first cups she misses are the only ones she gets wrong, so the choice is just
+
+\begin{align*}
+\#\{ w : |G \cap T| = k \} &= \binom{4}{k} \binom{4}{4-k}
+\end{align*}
+
+Therefore, all possible assignments are:
+\begin{center}
+\begin{tabular}{cccc}
+\hline
+$k$ & $2k$ & \# assignments & pr(x) \\
+\hline
+0 & 0 & $1 \cdot 1 = 1$ & $1/70$ \\
+1 & 2 & $4 \cdot 4 = 16$ & $16/70$ \\
+2 & 4 & $6 \cdot 6 = 36$ & $36/70$ \\
+3 & 6 & $4 \cdot 4 = 16$ & $16/70$ \\
+4 & 8 & $1 \cdot 1 = 1$ & $1/70$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\item \leavevmode
+
+*Calculate the exact one-sided permutation p-value $p = \Pr(S \ge S_{obs} \mid H_0)$ where $S$ is the number of correctly classified cups and $S_{obs} = 8$.*
+
+\begin{align*}
+p &= \Pr(S \ge S_{obs} \mid H_0), \qquad S_{obs} = 8 \\[4pt]
+&= \frac{\#\{ w \in \mathcal{W} : S(w) \ge 8 \}}{|\mathcal{W}|}
+\qquad W \text{ uniform on } \mathcal{W} \\[4pt]
+&= \Pr(S = 8 \mid H_0) \\[4pt]
+&= \Pr(k = 4 \mid H_0) \\[4pt]
+&= \frac{\binom{4}{4}\binom{4}{0}}{\binom{8}{4}} \\[6pt]
+&= \frac{1 \cdot 1}{70} \\[6pt]
+&= \frac{1}{70} = 0.0142857
+\end{align*}
+
+\item \leavevmode
+
+*Based on the resulting p-value, would you reject the null hypothesis at the 5\% significance level? Briefly explain.*
+
+\begin{align*}
+\alpha &= 0.05 \\[2pt]
+p &= 0.0143 \\[2pt]
+p &< \alpha \qquad \text{so we can reject the null} H_0
+\end{align*}
+
+Yes we can reject the null at the 5$\%$ level. So in this case, getting all eight right is therefore too unlikely to attribute to chance, and the data we have supports the conclusion that Muriel Bristol is able to tell which was poured first.
+
+\ep
+
+\item \leavevmode
+
+*Now suppose the experiment in the previous question is repeated using 100 cups. Tea is poured first in 50 cups, and milk is poured first in the remaining 50. A new participant must classify exactly 50 cups as tea first and 50 as milk first. She correctly classifies 67 of the 100 cups.*
+
+\bp
+
+\item \leavevmode
+
+*Write R code that uses Monte Carlo simulation to approximate the randomization distribution under the sharp null hypothesis. Use at least $B = 100{,}000$ random assignments.*
+
+```{r}
+set.seed(21523514)
+B <- 1e5
+truth <- rep(c(1, 0), each = 50)                    
+S <- replicate(B, sum(sample(truth) == truth))      
+```
+
+\item \leavevmode
+
+*For each simulated assignment, calculate the number of correctly classified cups.*
+
+```{r}
+head(S, 12)                                         
+summary(S)
+```
+
+\item \leavevmode
+
+*Plot the simulated randomization distribution and indicate the observed statistic i.e., $S_{obs} = 67$ with a vertical line.*
+
+```{r, fig.width = 6.2, fig.height = 3.4, fig.cap = "Simulated randomization distribution"}
+hist(S, breaks = seq(min(S) - 1, max(S) + 1, 2), col = "grey",
+     main = "Simulated randomization distribution",
+     xlab = "# of correctly classified cups")
+abline(v = 67, col = "red", lwd = 2)
+legend("topright", "obs = 67", col = "red", lwd = 2, bty = "n")
+```
+
+\item \leavevmode
+
+```{r}
+p <- mean(S >= 67)                                  
+p
+```
+
+\item \leavevmode
+
+\begin{align*}
+\alpha &= 0.05\\[2pt]
+\hat{p} &= 0.0003 \\[2pt]
+\hat{p} &< \alpha \qquad \text{so we can reject the null} H_0
+\end{align*}
+
+So yes, we can reject the null at 5$\%$ significance. In the context of the experiment, this is evidence that she can tell the difference, as a score 67$\leq$ would occur approximately 3 of every 10,000 randomizations. 
+
+\ep
+
+\eq
