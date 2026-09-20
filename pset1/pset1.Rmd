@@ -3,7 +3,7 @@ output:
   pdf_document: default
   html_document: default
 ---
-%As always, let me know if something isnt working or rendering correctly. I used AI to OCR and format my answers. More than happy to provide my written work too.
+%All you need to do is run this code and it will render the latex file. As always, let me know if something isnt working or rendering correctly. I used AI to OCR and format my answers. More than happy to provide my written work too.
 
 ---
 title: "Applied Statistical Programming: Problem Set 1"
