@@ -3,7 +3,7 @@ output:
   pdf_document: default
   html_document: default
 ---
-%All you need to do is knit this to pdf and it will render the tex file. As always, let me know if something isnt working or rendering correctly. I used AI to OCR and format my answers. I also used AI occasionally when I got stuck near the end. In this case, all errors are my own, and I am more than happy to provide my written work as well. 
+%All you need to do is knit this to pdf and it will render the tex file. As always, let me know if something isnt working or rendering correctly. I used AI to OCR and format my answers, and to brainstorm with me how to answer the lab questions, which I then used to help me answer the Pset. In this case, all errors are my own, and I am more than happy to provide my written work as well. 
 
 ---
 title: "Applied Statistical Programming: Problem Set 2"
