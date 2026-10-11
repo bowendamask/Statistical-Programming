@@ -195,7 +195,7 @@ for (t in 1:1000) {
   nonmatch <- (1 - lambda) * pattern_prob(u)
   xi       <- match / (match + nonmatch)
 
-  ## observed data lnlikelihood
+  ## lnlikelihood
   lnlik[t] <- sum(w * log(match + nonmatch))
 
   lambda <- sum(w * xi) / sum(w)
@@ -211,7 +211,6 @@ round(rbind(m, u), 6)
 data.frame(delta, count = w, Pr_match = round(xi, 4))
 plot(lnlik, type = "b", xlab = "Iteration", ylab = "Log-likelihood")
 
-## check never decreases
 all(diff(lnlik) >= 0)
 ```
 
