@@ -176,8 +176,7 @@ and repeat until the ln-likelihood converges
 
 ```{r, fig.width = 6.2, fig.height = 2.6}
 set.seed(21523514)
-delta <- rbind(c(0, 0, 0), c(1, 0, 0), c(0, 1, 0), c(0, 0, 1), c(1, 1, 1))
-colnames(delta) <- c("d1", "d2", "d3")
+delta <- cbind(d1 = c(0, 1, 0, 0, 1), d2 = c(0, 0, 1, 0, 1), d3 = c(0, 0, 0, 1, 1))
 w <- c(172738, 2030, 114, 68, 50)
 
 ## pr(x) of each pattern is just
@@ -188,7 +187,7 @@ pattern_prob <- function(p) {
 lambda <- 0.01
 m      <- rep(0.9, 3)
 u      <- rep(0.1, 3)
-loglik <- c()
+lnlik <- c()
 
 for (t in 1:1000) {
   ## Pr(pattern pair is a match)
@@ -196,30 +195,24 @@ for (t in 1:1000) {
   nonmatch <- (1 - lambda) * pattern_prob(u)
   xi       <- match / (match + nonmatch)
 
-  ## observed-data ln-likelihood
-  loglik[t] <- sum(w * log(match + nonmatch))
+  ## observed data lnlikelihood
+  lnlik[t] <- sum(w * log(match + nonmatch))
 
-  ## E(number of matches/non-matches)
-  n_match    <- w * xi
-  n_nonmatch <- w * (1 - xi)
-
-  lambda <- sum(n_match) / sum(w)
-  m      <- colSums(n_match * delta)    / sum(n_match)
-  u      <- colSums(n_nonmatch * delta) / sum(n_nonmatch)
-  if (t > 1 && abs(loglik[t] - loglik[t - 1]) < 1e-8) break
+  lambda <- sum(w * xi) / sum(w)
+  m      <- colSums(w * xi * delta)       / sum(w * xi)
+  u      <- colSums(w * (1 - xi) * delta) / sum(w * (1 - xi))
+  if (t > 1 && abs(lnlik[t] - lnlik[t - 1]) < 1e-8) break
 }
 
 lambda
 round(rbind(m, u), 6)
 
-## estimated match prob 
+## estimated match prob
 data.frame(delta, count = w, Pr_match = round(xi, 4))
-
-## plotted
-plot(loglik, type = "b", xlab = "Iteration", ylab = "Log-likelihood")
+plot(lnlik, type = "b", xlab = "Iteration", ylab = "Log-likelihood")
 
 ## check never decreases
-all(diff(loglik) >= -1e-8)
+all(diff(lnlik) >= 0)
 ```
 
 \item \leavevmode
