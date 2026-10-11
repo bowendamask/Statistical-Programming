@@ -35,26 +35,30 @@ knitr::opts_chunk$set(echo = TRUE, fig.width = 6, fig.height = 4)
 
 *Imagine that $(y_1, y_2, y_3, y_4, y_5) \sim \mathrm{Mult}(n, \delta_1, \delta_2, \delta_3, \delta_4, \delta_5)$, with $\delta_1 = \frac{1}{4}\theta$, $\delta_2 = \delta_3 = \frac{1}{4}(1-\theta)$, $\delta_4 = \frac{1}{2}$, and $\delta_5 = \frac{1}{4}\theta$. Instead of observing these data, we observe $(x_1, x_2, x_3, x_4) \sim \mathrm{Mult}(n, \pi_1, \pi_2, \pi_3, \pi_4)$, where $\pi_1 = \frac{1}{4}\theta$, $\pi_2 = \pi_3 = \frac{1}{4}(1-\theta)$, and $\pi_4 = \frac{1}{2} + \frac{1}{4}\theta$. So we have that $x_4 = y_4 + y_5$. Use the EM algorithm to recover an estimate of $\theta$.*
 
-Likelihood is 
-
+Likelihood is
 \begin{align*}
-L_c(\theta) &= \frac{n!}{\prod_{k} y_k!} \left( \tfrac{\theta}{4} \right)^{y_1} \left( \tfrac{1-\theta}{4} \right)^{y_2} \left( \tfrac{1-\theta}{4} \right)^{y_3} \left( \tfrac{1}{2} \right)^{y_4} \left( \tfrac{\theta}{4} \right)^{y_5} \\
+L_c(\theta) &= \frac{n!}{\prod_{k} y_k!} \left( \tfrac{\theta}{4} \right)^{y_1} \left( \tfrac{1-\theta}{4} \right)^{y_2} \left( \tfrac{1-\theta}{4} \right)^{y_3} \left( \tfrac{1}{2} \right)^{y_4} \left( \tfrac{\theta}{4} \right)^{y_5}
+\end{align*}
+
+ln-likelihood is
+\begin{align*}
 \ell_c(\theta) &= y_1 \log \tfrac{\theta}{4} + y_2 \log \tfrac{1-\theta}{4} + y_3 \log \tfrac{1-\theta}{4} + y_4 \log \tfrac{1}{2} + y_5 \log \tfrac{\theta}{4} + \log \frac{n!}{\prod_k y_k!} \\
+&= (y_1 + y_5) \log \theta + (y_2 + y_3) \log (1 - \theta) \\
+&\quad - (y_1 + y_2 + y_3 + y_5) \log 4 + y_4 \log \tfrac{1}{2} + \log \frac{n!}{\prod_k y_k!} \\
 &= (y_1 + y_5) \log \theta + (y_2 + y_3) \log (1 - \theta) + C
 \end{align*}
 
 Taking E of $y_5$ we get
-
 \begin{align*}
 y_5 \mid x_4, \theta &\sim \mathrm{Bin}\!\left( x_4, \; \frac{\delta_5}{\delta_4 + \delta_5} \right) \\
 \frac{\delta_5}{\delta_4 + \delta_5} &= \frac{\theta/4}{1/2 + \theta/4} \\
+&= \frac{\theta/4}{(2 + \theta)/4} \\
 &= \frac{\theta}{2 + \theta} \\
 y_5^{(t)} &\equiv E\!\left[ y_5 \mid x, \theta^{(t)} \right] \\
 &= x_4 \, \frac{\theta^{(t)}}{2 + \theta^{(t)}}
 \end{align*}
 
 Taking E again
-
 \begin{align*}
 Q(\theta \mid \theta^{(t)}) &= E\!\left[ \ell_c(\theta) \mid x, \theta^{(t)} \right] \\
 &= \left( E[y_1 \mid x] + E[y_5 \mid x, \theta^{(t)}] \right) \log \theta + E[y_2 + y_3 \mid x] \log (1 - \theta) + C \\
@@ -62,16 +66,15 @@ Q(\theta \mid \theta^{(t)}) &= E\!\left[ \ell_c(\theta) \mid x, \theta^{(t)} \ri
 \end{align*}
 
 FOC and max $Q$ over $\theta$ to get
-
 \begin{align*}
 \frac{\partial Q}{\partial \theta} &= \frac{x_1 + y_5^{(t)}}{\theta} - \frac{x_2 + x_3}{1 - \theta} = 0 \\
 \left( x_1 + y_5^{(t)} \right)(1 - \theta) &= (x_2 + x_3) \theta \\
+x_1 + y_5^{(t)} - \left( x_1 + y_5^{(t)} \right) \theta &= (x_2 + x_3) \theta \\
 x_1 + y_5^{(t)} &= \left( x_1 + y_5^{(t)} + x_2 + x_3 \right) \theta \\
 \theta^{(t+1)} &= \frac{x_1 + y_5^{(t)}}{x_1 + y_5^{(t)} + x_2 + x_3}
 \end{align*}
 
 and repeat until
-
 \begin{align*}
 \left| \theta^{(t+1)} - \theta^{(t)} \right| &< \epsilon
 \end{align*}
@@ -90,12 +93,14 @@ Letting \(\delta_{ij} \equiv \boldsymbol{\delta}(i,j)\) and
 \(\psi = (\lambda, m_1, \dots, m_K, u_1, \dots, u_K)\). Then
 \begin{align*}
 M_{ij} &\sim \mathrm{Bernoulli}(\lambda) \\
-f_1(\delta_{ij}) \equiv \Pr(\delta_{ij} \mid M_{ij} = 1) &= \prod_{k=1}^{K} m_k^{\delta_k(i,j)} (1 - m_k)^{1 - \delta_k(i,j)} \\
-f_0(\delta_{ij}) \equiv \Pr(\delta_{ij} \mid M_{ij} = 0) &= \prod_{k=1}^{K} u_k^{\delta_k(i,j)} (1 - u_k)^{1 - \delta_k(i,j)}
+\delta_k(i,j) \mid M_{ij} = 1 &\sim \mathrm{Bernoulli}(m_k), \qquad \delta_k(i,j) \mid M_{ij} = 0 \sim \mathrm{Bernoulli}(u_k) \\
+f_1(\delta_{ij}) \equiv \Pr(\delta_{ij} \mid M_{ij} = 1) &= \prod_{k=1}^{K} \Pr(\delta_k(i,j) \mid M_{ij} = 1) \\
+&= \prod_{k=1}^{K} m_k^{\delta_k(i,j)} (1 - m_k)^{1 - \delta_k(i,j)} \\
+f_0(\delta_{ij}) \equiv \Pr(\delta_{ij} \mid M_{ij} = 0) &= \prod_{k=1}^{K} \Pr(\delta_k(i,j) \mid M_{ij} = 0) \\
+&= \prod_{k=1}^{K} u_k^{\delta_k(i,j)} (1 - u_k)^{1 - \delta_k(i,j)}
 \end{align*}
 
 Observed likelihood is
-
 \begin{align*}
 \Pr(\delta_{ij}) &= \Pr(M_{ij} = 1) \Pr(\delta_{ij} \mid M_{ij} = 1) + \Pr(M_{ij} = 0) \Pr(\delta_{ij} \mid M_{ij} = 0) \\
 &= \lambda f_1(\delta_{ij}) + (1 - \lambda) f_0(\delta_{ij}) \\
@@ -104,9 +109,9 @@ L(\psi) &= \prod_{(i,j)} \Big[ \lambda f_1(\delta_{ij}) + (1 - \lambda) f_0(\del
 \end{align*}
 
 If we observed $M_{ij}$, the complete likelihood is
-
 \begin{align*}
-\Pr(\delta_{ij}, M_{ij}) &= \big[ \lambda f_1(\delta_{ij}) \big]^{M_{ij}} \big[ (1 - \lambda) f_0(\delta_{ij}) \big]^{1 - M_{ij}} \\
+\Pr(\delta_{ij}, M_{ij}) &= \lambda^{M_{ij}} (1 - \lambda)^{1 - M_{ij}} \, f_1(\delta_{ij})^{M_{ij}} f_0(\delta_{ij})^{1 - M_{ij}} \\
+&= \big[ \lambda f_1(\delta_{ij}) \big]^{M_{ij}} \big[ (1 - \lambda) f_0(\delta_{ij}) \big]^{1 - M_{ij}} \\
 L_c(\psi) &= \prod_{(i,j)} \big[ \lambda f_1(\delta_{ij}) \big]^{M_{ij}} \big[ (1 - \lambda) f_0(\delta_{ij}) \big]^{1 - M_{ij}} \\
 \ell_c(\psi) &= \sum_{(i,j)} \Big\{ M_{ij} \big[ \log \lambda + \log f_1(\delta_{ij}) \big] + (1 - M_{ij}) \big[ \log (1 - \lambda) + \log f_0(\delta_{ij}) \big] \Big\} \\
 \log f_1(\delta_{ij}) &= \sum_{k=1}^{K} \big[ \delta_k(i,j) \log m_k + (1 - \delta_k(i,j)) \log (1 - m_k) \big] \\
@@ -114,7 +119,6 @@ L_c(\psi) &= \prod_{(i,j)} \big[ \lambda f_1(\delta_{ij}) \big]^{M_{ij}} \big[ (
 \end{align*}
 
 Taking E we can get posterior pr(x)
-
 \begin{align*}
 \xi_{ij}^{(t)} &\equiv E\!\left[ M_{ij} \mid \delta_{ij}, \psi^{(t)} \right] \\
 &= \Pr\!\left( M_{ij} = 1 \mid \delta_{ij}, \psi^{(t)} \right) \\
@@ -123,14 +127,15 @@ Taking E we can get posterior pr(x)
 \end{align*}
 
 Taking E we get
-
 \begin{align*}
 Q(\psi \mid \psi^{(t)}) &= E\!\left[ \ell_c(\psi) \mid \delta, \psi^{(t)} \right] \\
-&= \sum_{(i,j)} \Big\{ \xi_{ij}^{(t)} \big[ \log \lambda + \log f_1(\delta_{ij}) \big] + (1 - \xi_{ij}^{(t)}) \big[ \log (1 - \lambda) + \log f_0(\delta_{ij}) \big] \Big\}
+&= \sum_{(i,j)} \Big\{ \xi_{ij}^{(t)} \big[ \log \lambda + \log f_1(\delta_{ij}) \big] + (1 - \xi_{ij}^{(t)}) \big[ \log (1 - \lambda) + \log f_0(\delta_{ij}) \big] \Big\} \\
+&= \log \lambda \sum_{(i,j)} \xi_{ij}^{(t)} + \log (1 - \lambda) \sum_{(i,j)} (1 - \xi_{ij}^{(t)}) \\
+&\quad + \sum_{(i,j)} \xi_{ij}^{(t)} \sum_{k=1}^{K} \big[ \delta_k(i,j) \log m_k + (1 - \delta_k(i,j)) \log (1 - m_k) \big] \\
+&\quad + \sum_{(i,j)} (1 - \xi_{ij}^{(t)}) \sum_{k=1}^{K} \big[ \delta_k(i,j) \log u_k + (1 - \delta_k(i,j)) \log (1 - u_k) \big]
 \end{align*}
 
 Then update for $\lambda$
-
 \begin{align*}
 \frac{\partial Q}{\partial \lambda} &= \frac{\sum_{(i,j)} \xi_{ij}^{(t)}}{\lambda} - \frac{\sum_{(i,j)} (1 - \xi_{ij}^{(t)})}{1 - \lambda} = 0 \\
 (1 - \lambda) \sum_{(i,j)} \xi_{ij}^{(t)} &= \lambda \sum_{(i,j)} (1 - \xi_{ij}^{(t)}) \\
@@ -140,7 +145,6 @@ Then update for $\lambda$
 \end{align*}
 
 and for $m_k$
-
 \begin{align*}
 \frac{\partial Q}{\partial m_k} &= \sum_{(i,j)} \xi_{ij}^{(t)} \left[ \frac{\delta_k(i,j)}{m_k} - \frac{1 - \delta_k(i,j)}{1 - m_k} \right] = 0 \\
 (1 - m_k) \sum_{(i,j)} \xi_{ij}^{(t)} \delta_k(i,j) &= m_k \sum_{(i,j)} \xi_{ij}^{(t)} (1 - \delta_k(i,j)) \\
@@ -149,7 +153,6 @@ m_k^{(t+1)} &= \frac{\sum_{(i,j)} \xi_{ij}^{(t)} \delta_k(i,j)}{\sum_{(i,j)} \xi
 \end{align*}
 
 and for $u_k$
-
 \begin{align*}
 \frac{\partial Q}{\partial u_k} &= \sum_{(i,j)} (1 - \xi_{ij}^{(t)}) \left[ \frac{\delta_k(i,j)}{u_k} - \frac{1 - \delta_k(i,j)}{1 - u_k} \right] = 0 \\
 (1 - u_k) \sum_{(i,j)} (1 - \xi_{ij}^{(t)}) \delta_k(i,j) &= u_k \sum_{(i,j)} (1 - \xi_{ij}^{(t)}) (1 - \delta_k(i,j)) \\
@@ -158,7 +161,6 @@ u_k^{(t+1)} &= \frac{\sum_{(i,j)} (1 - \xi_{ij}^{(t)}) \delta_k(i,j)}{\sum_{(i,j
 \end{align*}
 
 and repeat until the ln-likelihood converges
-
 \begin{align*}
 \left| \ell(\psi^{(t+1)}) - \ell(\psi^{(t)}) \right| &< \epsilon \\
 \widehat{\Pr}(M_{ij} = 1 \mid \delta_{ij}) &= \hat{\xi}_{ij} \\
@@ -166,9 +168,12 @@ and repeat until the ln-likelihood converges
 \end{align*}
 
 \pagebreak[3]
+
 \item \leavevmode
 
-*Consider the following table of counts for the agreement patterns $\boldsymbol{\delta}$ defined in the previous question.* *Here, $\boldsymbol{\delta} = (0, 0, 0)$ indicates disagreement on all four fields and occurs for 172738 record pairs. Similarly, $\boldsymbol{\delta} = (1, 1, 1)$ indicates agreement on all four fields and occurs for 50 record pairs. Patterns omitted from the table have a count of zero.*
+*Consider the following table of counts for the agreement patterns $\boldsymbol{\delta}$ defined in the previous question.*
+
+*Here, $\boldsymbol{\delta} = (0, 0, 0)$ indicates disagreement on all four fields and occurs for 172738 record pairs. Similarly, $\boldsymbol{\delta} = (1, 1, 1)$ indicates agreement on all four fields and occurs for 50 record pairs. Patterns omitted from the table have a count of zero.*
 
 *These counts are the observed data; as in the previous question, the match status $M$ remains unobserved for every pair. Using your derivations from the previous question, implement the EM algorithm and fit the model to these counts.*
 
@@ -176,6 +181,7 @@ and repeat until the ln-likelihood converges
 
 ```{r, fig.width = 6.2, fig.height = 2.6}
 set.seed(21523514)
+
 delta <- cbind(d1 = c(0, 1, 0, 0, 1), d2 = c(0, 0, 1, 0, 1), d3 = c(0, 0, 0, 1, 1))
 w <- c(172738, 2030, 114, 68, 50)
 
@@ -201,6 +207,7 @@ for (t in 1:1000) {
   lambda <- sum(w * xi) / sum(w)
   m      <- colSums(w * xi * delta)       / sum(w * xi)
   u      <- colSums(w * (1 - xi) * delta) / sum(w * (1 - xi))
+
   if (t > 1 && abs(lnlik[t] - lnlik[t - 1]) < 1e-8) break
 }
 
@@ -209,8 +216,8 @@ round(rbind(m, u), 6)
 
 ## estimated match prob
 data.frame(delta, count = w, Pr_match = round(xi, 4))
-plot(lnlik, type = "b", xlab = "Iteration", ylab = "Log-likelihood")
 
+plot(lnlik, type = "b", xlab = "Iteration", ylab = "Log-likelihood")
 all(diff(lnlik) >= 0)
 ```
 
@@ -224,9 +231,10 @@ labels are missing. Derive the EM algorithm for this problem.}
 Let \(\mathcal{L} = \{1, \dots, n_1\}\),
 \(\mathcal{U} = \{n_1 + 1, \dots, n\}\),
 \(z_{ic} = \mathbb{1}\{Z_i = c\}\) and
-\(\psi = (\pi_1, \mu_1, \mu_2, \sigma_1^2, \sigma_2^2)\) 
+\(\psi = (\pi_1, \mu_1, \mu_2, \sigma_1^2, \sigma_2^2)\)
 \begin{align*}
 \Pr(Z_i = c) &= \pi_c, \qquad c \in \{1, 2\}, \qquad \pi_1 + \pi_2 = 1 \\
+X_i \mid Z_i = c &\sim \mathcal{N}(\mu_c, \sigma_c^2) \\
 \phi_c(x_i) \equiv f(x_i \mid Z_i = c) &= \frac{1}{\sqrt{2\pi \sigma_c^2}} \exp\!\left( -\frac{(x_i - \mu_c)^2}{2\sigma_c^2} \right)
 \end{align*}
 
@@ -246,31 +254,34 @@ Posterior pr(x) is
 &= \frac{\pi_c^{(t)} \phi_c^{(t)}(x_i)}{\pi_1^{(t)} \phi_1^{(t)}(x_i) + \pi_2^{(t)} \phi_2^{(t)}(x_i)}
 \end{align*}
 
-Then the E complete log-likelihood is  
+Then the E complete log-likelihood is
 \begin{align*}
 Q(\psi \mid \psi^{(t)}) &= E\!\left[ \ell_c(\psi) \mid x, \{z_j\}_{j \in \mathcal{L}}, \psi^{(t)} \right] \\
 &= \sum_{i=1}^{n} \sum_{c=1}^{2} \tau_{ic}^{(t)} \Big[ \log \pi_c - \tfrac{1}{2} \log (2\pi) - \tfrac{1}{2} \log \sigma_c^2 - \frac{(x_i - \mu_c)^2}{2\sigma_c^2} \Big]
 \end{align*}
 
-And the E class counts are 
+And the E class counts are
 \begin{align*}
 N_c^{(t)} &\equiv \sum_{i=1}^{n} \tau_{ic}^{(t)} \\
 &= \sum_{i \in \mathcal{L}} z_{ic} + \sum_{i \in \mathcal{U}} \tau_{ic}^{(t)} \\
-N_1^{(t)} + N_2^{(t)} &= n
+N_1^{(t)} + N_2^{(t)} &= \sum_{i=1}^{n} \left( \tau_{i1}^{(t)} + \tau_{i2}^{(t)} \right) \\
+&= n
 \end{align*}
 
-Then update for \(\pi_1\) 
+Then update for \(\pi_1\)
 \begin{align*}
 Q &= N_1^{(t)} \log \pi_1 + N_2^{(t)} \log (1 - \pi_1) + C \\
 \frac{\partial Q}{\partial \pi_1} &= \frac{N_1^{(t)}}{\pi_1} - \frac{N_2^{(t)}}{1 - \pi_1} = 0 \\
 (1 - \pi_1) N_1^{(t)} &= \pi_1 N_2^{(t)} \\
+N_1^{(t)} - \pi_1 N_1^{(t)} &= \pi_1 N_2^{(t)} \\
 N_1^{(t)} &= \pi_1 \left( N_1^{(t)} + N_2^{(t)} \right) \\
 N_1^{(t)} &= \pi_1 n \\
 \pi_1^{(t+1)} &= \frac{N_1^{(t)}}{n} \\
-\pi_2^{(t+1)} &= 1 - \pi_1^{(t+1)}
+\pi_2^{(t+1)} &= 1 - \pi_1^{(t+1)} \\
+&= \frac{N_2^{(t)}}{n}
 \end{align*}
 
-and for \(\mu_c\) 
+and for \(\mu_c\)
 \begin{align*}
 \frac{\partial Q}{\partial \mu_c} &= \sum_{i=1}^{n} \tau_{ic}^{(t)} \frac{x_i - \mu_c}{\sigma_c^2} = 0 \\
 \sum_{i=1}^{n} \tau_{ic}^{(t)} (x_i - \mu_c) &= 0 \\
@@ -278,7 +289,7 @@ and for \(\mu_c\)
 \mu_c^{(t+1)} &= \frac{\sum_{i=1}^{n} \tau_{ic}^{(t)} x_i}{N_c^{(t)}}
 \end{align*}
 
-and for \(\sigma_c^2\) 
+and for \(\sigma_c^2\)
 \begin{align*}
 \frac{\partial Q}{\partial \sigma_c^2} &= \sum_{i=1}^{n} \tau_{ic}^{(t)} \left[ -\frac{1}{2\sigma_c^2} + \frac{(x_i - \mu_c)^2}{2\sigma_c^4} \right] = 0 \\
 \sum_{i=1}^{n} \tau_{ic}^{(t)} \left[ -\sigma_c^2 + (x_i - \mu_c)^2 \right] &= 0 \\
