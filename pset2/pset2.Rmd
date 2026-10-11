@@ -3,7 +3,7 @@ output:
   pdf_document: default
   html_document: default
 ---
-%All you need to do is knit this to pdf and it will render the tex file. As always, let me know if something isnt working or rendering correctly. I used AI to OCR and format my answers, and to brainstorm with me how to answer the lab questions, which I then used to help me answer the Pset. In this case, all errors are my own, and I am more than happy to provide my written work as well. 
+%All you need to do is knit this to pdf and it will render the tex file. As always, let me know if something isnt working or rendering correctly. I used AI to OCR, format, and help brainstorm some of my answers (as I was a bit confused after lab). All errors are my own, and I am more than happy to provide my written work as well. 
 
 ---
 title: "Applied Statistical Programming: Problem Set 2"
@@ -35,7 +35,7 @@ knitr::opts_chunk$set(echo = TRUE, fig.width = 6, fig.height = 4)
 
 *Imagine that $(y_1, y_2, y_3, y_4, y_5) \sim \mathrm{Mult}(n, \delta_1, \delta_2, \delta_3, \delta_4, \delta_5)$, with $\delta_1 = \frac{1}{4}\theta$, $\delta_2 = \delta_3 = \frac{1}{4}(1-\theta)$, $\delta_4 = \frac{1}{2}$, and $\delta_5 = \frac{1}{4}\theta$. Instead of observing these data, we observe $(x_1, x_2, x_3, x_4) \sim \mathrm{Mult}(n, \pi_1, \pi_2, \pi_3, \pi_4)$, where $\pi_1 = \frac{1}{4}\theta$, $\pi_2 = \pi_3 = \frac{1}{4}(1-\theta)$, and $\pi_4 = \frac{1}{2} + \frac{1}{4}\theta$. So we have that $x_4 = y_4 + y_5$. Use the EM algorithm to recover an estimate of $\theta$.*
 
-Likelihood is just written as
+Likelihood is 
 
 \begin{align*}
 L_c(\theta) &= \frac{n!}{\prod_{k} y_k!} \left( \tfrac{\theta}{4} \right)^{y_1} \left( \tfrac{1-\theta}{4} \right)^{y_2} \left( \tfrac{1-\theta}{4} \right)^{y_3} \left( \tfrac{1}{2} \right)^{y_4} \left( \tfrac{\theta}{4} \right)^{y_5} \\
@@ -43,7 +43,7 @@ L_c(\theta) &= \frac{n!}{\prod_{k} y_k!} \left( \tfrac{\theta}{4} \right)^{y_1} 
 &= (y_1 + y_5) \log \theta + (y_2 + y_3) \log (1 - \theta) + C
 \end{align*}
 
-Taking expected value of $y_5$ we get
+Taking E of $y_5$ we get
 
 \begin{align*}
 y_5 \mid x_4, \theta &\sim \mathrm{Bin}\!\left( x_4, \; \frac{\delta_5}{\delta_4 + \delta_5} \right) \\
@@ -53,7 +53,7 @@ y_5^{(t)} &\equiv E\!\left[ y_5 \mid x, \theta^{(t)} \right] \\
 &= x_4 \, \frac{\theta^{(t)}}{2 + \theta^{(t)}}
 \end{align*}
 
-Taking expectations we get
+Taking E again
 
 \begin{align*}
 Q(\theta \mid \theta^{(t)}) &= E\!\left[ \ell_c(\theta) \mid x, \theta^{(t)} \right] \\
@@ -61,7 +61,7 @@ Q(\theta \mid \theta^{(t)}) &= E\!\left[ \ell_c(\theta) \mid x, \theta^{(t)} \ri
 &= \left( x_1 + y_5^{(t)} \right) \log \theta + (x_2 + x_3) \log (1 - \theta) + C
 \end{align*}
 
-Then just max $Q$ over $\theta$ to get
+FOC and max $Q$ over $\theta$ to get
 
 \begin{align*}
 \frac{\partial Q}{\partial \theta} &= \frac{x_1 + y_5^{(t)}}{\theta} - \frac{x_2 + x_3}{1 - \theta} = 0 \\
@@ -86,7 +86,7 @@ and repeat until
 
 *Hint: given the information above, if you make the right calls for the distributions of $M_{ij}$ and of $\boldsymbol{\delta}(i,j) \mid M_{ij} = m$, where $m \in \{0, 1\}$, then you will be good to go.*
 
-Define \(\delta_{ij} \equiv \boldsymbol{\delta}(i,j)\) and
+Letting \(\delta_{ij} \equiv \boldsymbol{\delta}(i,j)\) and
 \(\psi = (\lambda, m_1, \dots, m_K, u_1, \dots, u_K)\). Then
 \begin{align*}
 M_{ij} &\sim \mathrm{Bernoulli}(\lambda) \\
@@ -94,7 +94,7 @@ f_1(\delta_{ij}) \equiv \Pr(\delta_{ij} \mid M_{ij} = 1) &= \prod_{k=1}^{K} m_k^
 f_0(\delta_{ij}) \equiv \Pr(\delta_{ij} \mid M_{ij} = 0) &= \prod_{k=1}^{K} u_k^{\delta_k(i,j)} (1 - u_k)^{1 - \delta_k(i,j)}
 \end{align*}
 
-Then we can just get the observed likelihood as
+Observed likelihood is
 
 \begin{align*}
 \Pr(\delta_{ij}) &= \Pr(M_{ij} = 1) \Pr(\delta_{ij} \mid M_{ij} = 1) + \Pr(M_{ij} = 0) \Pr(\delta_{ij} \mid M_{ij} = 0) \\
@@ -103,7 +103,7 @@ L(\psi) &= \prod_{(i,j)} \Big[ \lambda f_1(\delta_{ij}) + (1 - \lambda) f_0(\del
 \ell(\psi) &= \sum_{(i,j)} \log \Big[ \lambda f_1(\delta_{ij}) + (1 - \lambda) f_0(\delta_{ij}) \Big]
 \end{align*}
 
-If we observed $M_{ij}$, the complete likelihood would be
+If we observed $M_{ij}$, the complete likelihood is
 
 \begin{align*}
 \Pr(\delta_{ij}, M_{ij}) &= \big[ \lambda f_1(\delta_{ij}) \big]^{M_{ij}} \big[ (1 - \lambda) f_0(\delta_{ij}) \big]^{1 - M_{ij}} \\
@@ -113,7 +113,7 @@ L_c(\psi) &= \prod_{(i,j)} \big[ \lambda f_1(\delta_{ij}) \big]^{M_{ij}} \big[ (
 \log f_0(\delta_{ij}) &= \sum_{k=1}^{K} \big[ \delta_k(i,j) \log u_k + (1 - \delta_k(i,j)) \log (1 - u_k) \big]
 \end{align*}
 
-Taking expectation we can get posterior pr(x)
+Taking E we can get posterior pr(x)
 
 \begin{align*}
 \xi_{ij}^{(t)} &\equiv E\!\left[ M_{ij} \mid \delta_{ij}, \psi^{(t)} \right] \\
@@ -122,14 +122,14 @@ Taking expectation we can get posterior pr(x)
 &= \frac{\lambda^{(t)} f_1^{(t)}(\delta_{ij})}{\lambda^{(t)} f_1^{(t)}(\delta_{ij}) + (1 - \lambda^{(t)}) f_0^{(t)}(\delta_{ij})}
 \end{align*}
 
-Taking expectations we get
+Taking E we get
 
 \begin{align*}
 Q(\psi \mid \psi^{(t)}) &= E\!\left[ \ell_c(\psi) \mid \delta, \psi^{(t)} \right] \\
 &= \sum_{(i,j)} \Big\{ \xi_{ij}^{(t)} \big[ \log \lambda + \log f_1(\delta_{ij}) \big] + (1 - \xi_{ij}^{(t)}) \big[ \log (1 - \lambda) + \log f_0(\delta_{ij}) \big] \Big\}
 \end{align*}
 
-We can then update for $\lambda$
+Then update for $\lambda$
 
 \begin{align*}
 \frac{\partial Q}{\partial \lambda} &= \frac{\sum_{(i,j)} \xi_{ij}^{(t)}}{\lambda} - \frac{\sum_{(i,j)} (1 - \xi_{ij}^{(t)})}{1 - \lambda} = 0 \\
@@ -148,7 +148,7 @@ and for $m_k$
 m_k^{(t+1)} &= \frac{\sum_{(i,j)} \xi_{ij}^{(t)} \delta_k(i,j)}{\sum_{(i,j)} \xi_{ij}^{(t)}}
 \end{align*}
 
-and also for $u_k$
+and for $u_k$
 
 \begin{align*}
 \frac{\partial Q}{\partial u_k} &= \sum_{(i,j)} (1 - \xi_{ij}^{(t)}) \left[ \frac{\delta_k(i,j)}{u_k} - \frac{1 - \delta_k(i,j)}{1 - u_k} \right] = 0 \\
@@ -157,7 +157,7 @@ and also for $u_k$
 u_k^{(t+1)} &= \frac{\sum_{(i,j)} (1 - \xi_{ij}^{(t)}) \delta_k(i,j)}{\sum_{(i,j)} (1 - \xi_{ij}^{(t)})}
 \end{align*}
 
-We repeat until the log-likelihood converges, which gives
+and repeat until the ln-likelihood converges
 
 \begin{align*}
 \left| \ell(\psi^{(t+1)}) - \ell(\psi^{(t)}) \right| &< \epsilon \\
@@ -196,7 +196,7 @@ for (t in 1:1000) {
   nonmatch <- (1 - lambda) * pattern_prob(u)
   xi       <- match / (match + nonmatch)
 
-  ## observed-data log-likelihood at the current parameters
+  ## observed-data ln-likelihood
   loglik[t] <- sum(w * log(match + nonmatch))
 
   ## E(number of matches/non-matches)
@@ -206,21 +206,19 @@ for (t in 1:1000) {
   lambda <- sum(n_match) / sum(w)
   m      <- colSums(n_match * delta)    / sum(n_match)
   u      <- colSums(n_nonmatch * delta) / sum(n_nonmatch)
-
-  ## stop when the log-likelihood stops changing
   if (t > 1 && abs(loglik[t] - loglik[t - 1]) < 1e-8) break
 }
 
 lambda
 round(rbind(m, u), 6)
 
-## estimated match pr(x) 
+## estimated match prob 
 data.frame(delta, count = w, Pr_match = round(xi, 4))
 
 ## plotted
 plot(loglik, type = "b", xlab = "Iteration", ylab = "Log-likelihood")
 
-## never decreases?
+## check never decreases
 all(diff(loglik) >= -1e-8)
 ```
 
@@ -231,7 +229,7 @@ two-component Gaussian mixture. For \(n_1\) observations, the class
 label \(Z_i\) is known; for the rest i.e., \(n_2 = n - n_1\), the class
 labels are missing. Derive the EM algorithm for this problem.}
 
-Start by letting \(\mathcal{L} = \{1, \dots, n_1\}\),
+Let \(\mathcal{L} = \{1, \dots, n_1\}\),
 \(\mathcal{U} = \{n_1 + 1, \dots, n\}\),
 \(z_{ic} = \mathbb{1}\{Z_i = c\}\) and
 \(\psi = (\pi_1, \mu_1, \mu_2, \sigma_1^2, \sigma_2^2)\) 
@@ -240,14 +238,14 @@ Start by letting \(\mathcal{L} = \{1, \dots, n_1\}\),
 \phi_c(x_i) \equiv f(x_i \mid Z_i = c) &= \frac{1}{\sqrt{2\pi \sigma_c^2}} \exp\!\left( -\frac{(x_i - \mu_c)^2}{2\sigma_c^2} \right)
 \end{align*}
 
-Then the complete likelihood can just be written as 
+Complete likelihood is
 \begin{align*}
 L_c(\psi) &= \prod_{i=1}^{n} \prod_{c=1}^{2} \big[ \pi_c \phi_c(x_i) \big]^{z_{ic}} \\
 \ell_c(\psi) &= \sum_{i=1}^{n} \sum_{c=1}^{2} z_{ic} \Big[ \log \pi_c + \log \phi_c(x_i) \Big] \\
 &= \sum_{i=1}^{n} \sum_{c=1}^{2} z_{ic} \Big[ \log \pi_c - \tfrac{1}{2} \log (2\pi) - \tfrac{1}{2} \log \sigma_c^2 - \frac{(x_i - \mu_c)^2}{2\sigma_c^2} \Big]
 \end{align*}
 
-Taking the posterior pr(x) we get 
+Posterior pr(x) is
 \begin{align*}
 \tau_{ic}^{(t)} &\equiv E\!\left[ z_{ic} \mid x, \{z_j\}_{j \in \mathcal{L}}, \psi^{(t)} \right] \\
 \tau_{ic}^{(t)} &= z_{ic}, \qquad i \in \mathcal{L} \\
@@ -256,20 +254,20 @@ Taking the posterior pr(x) we get
 &= \frac{\pi_c^{(t)} \phi_c^{(t)}(x_i)}{\pi_1^{(t)} \phi_1^{(t)}(x_i) + \pi_2^{(t)} \phi_2^{(t)}(x_i)}
 \end{align*}
 
-Then the expected complete log-likelihood is  
+Then the E complete log-likelihood is  
 \begin{align*}
 Q(\psi \mid \psi^{(t)}) &= E\!\left[ \ell_c(\psi) \mid x, \{z_j\}_{j \in \mathcal{L}}, \psi^{(t)} \right] \\
 &= \sum_{i=1}^{n} \sum_{c=1}^{2} \tau_{ic}^{(t)} \Big[ \log \pi_c - \tfrac{1}{2} \log (2\pi) - \tfrac{1}{2} \log \sigma_c^2 - \frac{(x_i - \mu_c)^2}{2\sigma_c^2} \Big]
 \end{align*}
 
-And the expected class counts are 
+And the E class counts are 
 \begin{align*}
 N_c^{(t)} &\equiv \sum_{i=1}^{n} \tau_{ic}^{(t)} \\
 &= \sum_{i \in \mathcal{L}} z_{ic} + \sum_{i \in \mathcal{U}} \tau_{ic}^{(t)} \\
 N_1^{(t)} + N_2^{(t)} &= n
 \end{align*}
 
-Finally, we update for \(\pi_1\) 
+Then update for \(\pi_1\) 
 \begin{align*}
 Q &= N_1^{(t)} \log \pi_1 + N_2^{(t)} \log (1 - \pi_1) + C \\
 \frac{\partial Q}{\partial \pi_1} &= \frac{N_1^{(t)}}{\pi_1} - \frac{N_2^{(t)}}{1 - \pi_1} = 0 \\
@@ -280,7 +278,7 @@ N_1^{(t)} &= \pi_1 n \\
 \pi_2^{(t+1)} &= 1 - \pi_1^{(t+1)}
 \end{align*}
 
-Then we update for \(\mu_c\) 
+and for \(\mu_c\) 
 \begin{align*}
 \frac{\partial Q}{\partial \mu_c} &= \sum_{i=1}^{n} \tau_{ic}^{(t)} \frac{x_i - \mu_c}{\sigma_c^2} = 0 \\
 \sum_{i=1}^{n} \tau_{ic}^{(t)} (x_i - \mu_c) &= 0 \\
@@ -288,7 +286,7 @@ Then we update for \(\mu_c\)
 \mu_c^{(t+1)} &= \frac{\sum_{i=1}^{n} \tau_{ic}^{(t)} x_i}{N_c^{(t)}}
 \end{align*}
 
-and also for \(\sigma_c^2\) 
+and for \(\sigma_c^2\) 
 \begin{align*}
 \frac{\partial Q}{\partial \sigma_c^2} &= \sum_{i=1}^{n} \tau_{ic}^{(t)} \left[ -\frac{1}{2\sigma_c^2} + \frac{(x_i - \mu_c)^2}{2\sigma_c^4} \right] = 0 \\
 \sum_{i=1}^{n} \tau_{ic}^{(t)} \left[ -\sigma_c^2 + (x_i - \mu_c)^2 \right] &= 0 \\
@@ -296,7 +294,7 @@ and also for \(\sigma_c^2\)
 \sigma_c^{2\,(t+1)} &= \frac{\sum_{i=1}^{n} \tau_{ic}^{(t)} \left( x_i - \mu_c^{(t+1)} \right)^2}{N_c^{(t)}}
 \end{align*}
 
-and repeat until
+until
 \begin{align*}
 \left\| \psi^{(t+1)} - \psi^{(t)} \right\| &< \epsilon
 \end{align*}
