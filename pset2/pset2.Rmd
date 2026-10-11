@@ -167,7 +167,7 @@ and repeat until the ln-likelihood converges
 &= \frac{\hat{\lambda} \hat{f}_1(\delta_{ij})}{\hat{\lambda} \hat{f}_1(\delta_{ij}) + (1 - \hat{\lambda}) \hat{f}_0(\delta_{ij})}
 \end{align*}
 
-\pagebreak[3]
+\pagebreak
 
 \item \leavevmode
 
@@ -254,7 +254,7 @@ Posterior pr(x) is
 &= \frac{\pi_c^{(t)} \phi_c^{(t)}(x_i)}{\pi_1^{(t)} \phi_1^{(t)}(x_i) + \pi_2^{(t)} \phi_2^{(t)}(x_i)}
 \end{align*}
 
-Then the E complete log-likelihood is
+Then the E complete ln-likelihood is
 \begin{align*}
 Q(\psi \mid \psi^{(t)}) &= E\!\left[ \ell_c(\psi) \mid x, \{z_j\}_{j \in \mathcal{L}}, \psi^{(t)} \right] \\
 &= \sum_{i=1}^{n} \sum_{c=1}^{2} \tau_{ic}^{(t)} \Big[ \log \pi_c - \tfrac{1}{2} \log (2\pi) - \tfrac{1}{2} \log \sigma_c^2 - \frac{(x_i - \mu_c)^2}{2\sigma_c^2} \Big]
