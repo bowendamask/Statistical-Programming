@@ -4,3 +4,4 @@ Homework Uploaded:
 - Lab 2
 - Pset 1
 - Pset 2
+- Pset 3
