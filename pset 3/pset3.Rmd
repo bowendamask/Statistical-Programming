@@ -3,7 +3,7 @@ output:
   pdf_document: default
   html_document: default
 ---
-%All you need to do is knit this to pdf and it will render the tex file. As always, let me know if something isnt working or rendering correctly. I also used "High performance functions with Rcpp - by Hadley Wickham, the rccp lecture notes, and AI to help brainstorm some of my answers. All errors are my own, and I am more than happy to provide my written work as well.
+%All you need to do is knit this to pdf and it will render the tex file. As always, let me know if something isnt working or rendering correctly. I also used "High performance functions with Rcpp - by Hadley Wickham, the rccp lecture notes, and AI to help brainstorm some of my answers. All errors are my own, and I am more than happy to provide any written work as well.
 
 ---
 title: "Applied Statistical Programming: Problem Set 3"
